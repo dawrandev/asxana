@@ -126,7 +126,7 @@ endpoints:
         name: sort_by
         description: ''
         required: false
-        example: category_name
+        example: price
         type: string
         enumValues:
           - created_at
@@ -154,7 +154,7 @@ endpoints:
       search: mqeopfuudtdsufvyvddqa
       min_price: 45
       max_price: 46
-      sort_by: category_name
+      sort_by: price
       sort_order: desc
     fileParameters: []
     responses:

@@ -24,7 +24,7 @@ return [
 
     // The base URL displayed in the docs.
     // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
-    'base_url' => env('SCRIBE_BASE_URL', config("app.url") . '/api/v1'),
+    'base_url' => config("app.url"),
 
     // Routes to include in the docs
     'routes' => [
@@ -53,7 +53,7 @@ return [
     // - "static" will generate a static HTMl page in the /public/docs folder,
     // - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
     // - "external_static" and "external_laravel" do the same as above, but pass the OpenAPI spec as a URL to an external UI template
-    'type' => 'static',
+    'type' => 'laravel',
 
     // See https://scribe.knuckles.wtf/laravel/reference/config#theme for supported options
     'theme' => 'default',
@@ -91,7 +91,7 @@ return [
         'enabled' => true,
 
         // The base URL to use in the API tester. Leave as null to be the same as the displayed URL (`scribe.base_url`).
-        'base_url' => env('SCRIBE_BASE_URL', env('APP_URL') . '/api/v1'),
+        'base_url' => null,
 
         // [Laravel Sanctum] Fetch a CSRF token before each request, and add it as an X-XSRF-TOKEN header.
         'use_csrf' => false,
