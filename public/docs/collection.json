@@ -1,0 +1,398 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/localhost"
+        }
+    ],
+    "info": {
+        "name": "Laravel API Documentation",
+        "_postman_id": "e5887c29-18b8-41f8-8ad2-5681233214b0",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Category Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "Get all categories",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/categories",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/categories"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"success\": true,\n  \"message\": \"Categories retrieved successfully\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"translations\": [\n        {\n          \"id\": 1,\n          \"category_id\": 1,\n          \"lang_code\": \"qq\",\n          \"name\": \"Salat\",\n          \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n          \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n        },\n        {\n          \"id\": 2,\n          \"category_id\": 1,\n          \"lang_code\": \"uz\",\n          \"name\": \"Salat\",\n          \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n          \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n        },\n        {\n          \"id\": 3,\n          \"category_id\": 1,\n          \"lang_code\": \"ru\",\n          \"name\": \"\u0421\u0430\u043b\u0430\u0442\",\n          \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n          \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n        }\n      ],\n      \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n      \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n    },\n    {\n      \"id\": 2,\n      \"translations\": [\n        {\n          \"id\": 4,\n          \"category_id\": 2,\n          \"lang_code\": \"qq\",\n          \"name\": \"Hot-dog\",\n          \"created_at\": \"2024-01-15T10:31:00.000000Z\",\n          \"updated_at\": \"2024-01-15T10:31:00.000000Z\"\n        },\n        {\n          \"id\": 5,\n          \"category_id\": 2,\n          \"lang_code\": \"uz\",\n          \"name\": \"Hot-dog\",\n          \"created_at\": \"2024-01-15T10:31:00.000000Z\",\n          \"updated_at\": \"2024-01-15T10:31:00.000000Z\"\n        },\n        {\n          \"id\": 6,\n          \"category_id\": 2,\n          \"lang_code\": \"ru\",\n          \"name\": \"\u0425\u043e\u0442-\u0434\u043e\u0433\",\n          \"created_at\": \"2024-01-15T10:31:00.000000Z\",\n          \"updated_at\": \"2024-01-15T10:31:00.000000Z\"\n        }\n      ],\n      \"created_at\": \"2024-01-15T10:31:00.000000Z\",\n      \"updated_at\": \"2024-01-15T10:31:00.000000Z\"\n    }\n  ],\n  \"code\": 200\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Failed to retrieve categories\",\n  \"data\": null,\n  \"code\": 500\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create a new category",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/categories",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/categories"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"translations\":[{\"lang_code\":\"qq\",\"name\":\"Pizza\"},{\"lang_code\":\"uz\",\"name\":\"Pitsa\"},{\"lang_code\":\"ru\",\"name\":\"\u041f\u0438\u0446\u0446\u0430\"}]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"success\": true,\n  \"message\": \"Category created successfully\",\n  \"data\": {\n    \"id\": 4,\n    \"translations\": [\n      {\n        \"id\": 10,\n        \"category_id\": 4,\n        \"lang_code\": \"qq\",\n        \"name\": \"Pizza\",\n        \"created_at\": \"2024-01-15T11:00:00.000000Z\",\n        \"updated_at\": \"2024-01-15T11:00:00.000000Z\"\n      },\n      {\n        \"id\": 11,\n        \"category_id\": 4,\n        \"lang_code\": \"uz\",\n        \"name\": \"Pitsa\",\n        \"created_at\": \"2024-01-15T11:00:00.000000Z\",\n        \"updated_at\": \"2024-01-15T11:00:00.000000Z\"\n      },\n      {\n        \"id\": 12,\n        \"category_id\": 4,\n        \"lang_code\": \"ru\",\n        \"name\": \"\u041f\u0438\u0446\u0446\u0430\",\n        \"created_at\": \"2024-01-15T11:00:00.000000Z\",\n        \"updated_at\": \"2024-01-15T11:00:00.000000Z\"\n      }\n    ],\n    \"created_at\": \"2024-01-15T11:00:00.000000Z\",\n    \"updated_at\": \"2024-01-15T11:00:00.000000Z\"\n  },\n  \"code\": 201\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Validation error\",\n  \"errors\": {\n    \"translations\": [\"At least one translation is required\"],\n    \"translations.0.lang_code\": [\"The language code must be one of: qq, uz, ru\"],\n    \"translations.0.name\": [\"The category name is required\", \"The category name has already been taken for this language\"]\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Failed to create category\",\n  \"data\": null,\n  \"code\": 500\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Get a specific category",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/categories\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/categories\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Category ID."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"success\": true,\n  \"message\": \"Category retrieved successfully\",\n  \"data\": {\n    \"id\": 1,\n    \"translations\": [\n      {\n        \"id\": 1,\n        \"category_id\": 1,\n        \"lang_code\": \"qq\",\n        \"name\": \"Salat\",\n        \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n        \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n      },\n      {\n        \"id\": 2,\n        \"category_id\": 1,\n        \"lang_code\": \"uz\",\n        \"name\": \"Salat\",\n        \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n        \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n      },\n      {\n        \"id\": 3,\n        \"category_id\": 1,\n        \"lang_code\": \"ru\",\n        \"name\": \"\u0421\u0430\u043b\u0430\u0442\",\n        \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n        \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n      }\n    ],\n    \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n    \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n  },\n  \"code\": 200\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Category not found\",\n  \"data\": null,\n  \"code\": 404\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Failed to retrieve category\",\n  \"data\": null,\n  \"code\": 500\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update a category",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/categories\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/categories\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Category ID."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"translations\":[{\"lang_code\":\"qq\",\"name\":\"Fresh Salat\"},{\"lang_code\":\"uz\",\"name\":\"Yangi Salat\"},{\"lang_code\":\"ru\",\"name\":\"\u0421\u0432\u0435\u0436\u0438\u0439 \u0421\u0430\u043b\u0430\u0442\"}],\"tranalations\":[{\"name\":\"vmqeopfuudtdsufvyvddq\"}]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"success\": true,\n  \"message\": \"Category updated successfully\",\n  \"data\": {\n    \"id\": 1,\n    \"translations\": [\n      {\n        \"id\": 1,\n        \"category_id\": 1,\n        \"lang_code\": \"qq\",\n        \"name\": \"Fresh Salat\",\n        \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n        \"updated_at\": \"2024-01-15T12:00:00.000000Z\"\n      },\n      {\n        \"id\": 2,\n        \"category_id\": 1,\n        \"lang_code\": \"uz\",\n        \"name\": \"Yangi Salat\",\n        \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n        \"updated_at\": \"2024-01-15T12:00:00.000000Z\"\n      },\n      {\n        \"id\": 3,\n        \"category_id\": 1,\n        \"lang_code\": \"ru\",\n        \"name\": \"\u0421\u0432\u0435\u0436\u0438\u0439 \u0421\u0430\u043b\u0430\u0442\",\n        \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n        \"updated_at\": \"2024-01-15T12:00:00.000000Z\"\n      }\n    ],\n    \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n    \"updated_at\": \"2024-01-15T12:00:00.000000Z\"\n  },\n  \"code\": 200\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Category not found\",\n  \"data\": null,\n  \"code\": 404\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Validation error\",\n  \"errors\": {\n    \"translations.0.name\": [\"The category name has already been taken for this language\"]\n  }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Failed to update category\",\n  \"data\": null,\n  \"code\": 500\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete a category",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/categories\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/categories\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Category ID."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"success\": true,\n  \"message\": \"Category deleted successfully\",\n  \"data\": null,\n  \"code\": 200\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Category not found\",\n  \"data\": null,\n  \"code\": 404\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n  \"success\": false,\n  \"message\": \"Failed to delete category\",\n  \"data\": null,\n  \"code\": 500\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "GET api\/user",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "GET api\/v1\/products",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/products",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/products"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"category_id\":17,\"is_available\":true,\"search\":\"mqeopfuudtdsufvyvddqa\",\"min_price\":45,\"max_price\":46,\"sort_by\":\"price\",\"sort_order\":\"desc\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 422,
+                            "body": "{\"success\":false,\"message\":\"Validation error\",\"errors\":{\"category_id\":[\"Selected category does not exist\"]}}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}
