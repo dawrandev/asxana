@@ -95,7 +95,7 @@ class CategoryController extends Controller
      * Yangi kategoriya yaratish
      * 
      * @OA\Post(
-     *     path="/api/categories",
+     *     path="/api/v1/categories",
      *     operationId="storeCategory",
      *     tags={"Categories"},
      *     summary="Yangi kategoriya qo'shish",
@@ -188,7 +188,7 @@ class CategoryController extends Controller
      * Bitta kategoriyani ko'rish
      * 
      * @OA\Get(
-     *     path="/api/categories/{id}",
+     *     path="/api/v1/categories/{id}",
      *     operationId="getCategoryById",
      *     tags={"Categories"},
      *     summary="ID bo'yicha kategoriyani olish",
@@ -265,7 +265,7 @@ class CategoryController extends Controller
      * Kategoriyani yangilash
      * 
      * @OA\Put(
-     *     path="/api/categories/{id}",
+     *     path="/api/v1/categories/{id}",
      *     operationId="updateCategory",
      *     tags={"Categories"},
      *     summary="Mavjud kategoriyani yangilash",
@@ -373,7 +373,7 @@ class CategoryController extends Controller
      * Kategoriyani o'chirish
      * 
      * @OA\Delete(
-     *     path="/api/categories/{id}",
+     *     path="/api/v1/categories/{id}",
      *     operationId="deleteCategory",
      *     tags={"Categories"},
      *     summary="Kategoriyani o'chirish",
