@@ -15,6 +15,8 @@ use Illuminate\Http\JsonResponse;
  *     name="Categories",
  *     description="Kategoriyalarni boshqarish uchun API endpointlar"
  * )
+ * 
+ * 
  */
 class CategoryController extends Controller
 {
@@ -24,48 +26,58 @@ class CategoryController extends Controller
     ) {}
 
     /**
-     *  
-     * 
      * @OA\Get(
-     *     path="/api/categories",
-     *     operationId="getCategoriesList",
-     *     tags={"Categories"},
-     *     summary="Barcha kategoriyalarni ro'yxatini olish",
-     *     description="Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Bu endpoint autentifikatsiya talab qilmaydi.",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Muvaffaqiyatli javob",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Categories retrieved successfully"),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="array",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer", example=1),
-     *                     @OA\Property(property="name", type="string", example="Elektronika"),
-     *                     @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
-     *                     @OA\Property(property="products_count", type="integer", example=25),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
-     *                 )
-     *             ),
-     *             @OA\Property(property="code", type="integer", example=200)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Server xatosi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Failed to retrieve categories"),
-     *             @OA\Property(property="data", type="null"),
-     *             @OA\Property(property="code", type="integer", example=500)
-     *         )
-     *     )
+     * path="/api/v1/categories",
+     * operationId="getCategoriesList",
+     * tags={"Categories"},
+     * summary="Barcha kategoriyalarni ro'yxatini olish",
+     * description="Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Bu endpoint autentifikatsiya talab qilmaydi.",
+     * * @OA\Parameter(
+     * name="Accept-Language",
+     * in="header",
+     * required=false,
+     * description="Tizim tilini belgilash uchun (uz, ru, en)",
+     * @OA\Schema(
+     * type="string",
+     * enum={"uz", "ru", "en"},
+     * default="uz"
+     * )
+     * ),
+     *
+     * @OA\Response(
+     * response=200,
+     * description="Muvaffaqiyatli javob",
+     * @OA\JsonContent(
+     * type="object",
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Categories retrieved successfully"),
+     * @OA\Property(
+     * property="data",
+     * type="array",
+     * @OA\Items(
+     * type="object",
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="name", type="string", example="Elektronika"),
+     * @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
+     * @OA\Property(property="products_count", type="integer", example=25),
+     * @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
+     * @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
+     * )
+     * ),
+     * @OA\Property(property="code", type="integer", example=200)
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Server xatosi",
+     * @OA\JsonContent(
+     * type="object",
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Failed to retrieve categories"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=500)
+     * )
+     * )
      * )
      */
     public function index(): JsonResponse

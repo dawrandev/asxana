@@ -24,7 +24,7 @@
         }
     ],
     "paths": {
-        "/api/categories": {
+        "/api/v1/categories": {
             "get": {
                 "tags": [
                     "Categories"
@@ -32,6 +32,23 @@
                 "summary": "Barcha kategoriyalarni ro'yxatini olish",
                 "description": "Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Bu endpoint autentifikatsiya talab qilmaydi.",
                 "operationId": "getCategoriesList",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Tizim tilini belgilash uchun (uz, ru, en)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "uz",
+                            "enum": [
+                                "uz",
+                                "ru",
+                                "en"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Muvaffaqiyatli javob",
@@ -119,7 +136,9 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/categories": {
             "post": {
                 "tags": [
                     "Categories"
