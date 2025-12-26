@@ -9,8 +9,13 @@ use App\Models\Category;
 use App\Repositories\CategoryRepository;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
+/**
+ * @OA\Tag(
+ *     name="Categories",
+ *     description="Kategoriyalarni boshqarish uchun API endpointlar"
+ * )
+ */
 class CategoryController extends Controller
 {
     public function __construct(
@@ -19,100 +24,49 @@ class CategoryController extends Controller
     ) {}
 
     /**
-     * Get all categories
-     *
-     * @group Category Management
-     * @responseField success boolean Operation success status
-     * @responseField message string Response message
-     * @responseField data array List of categories with translations
-     * @responseField data[].id integer Category ID
-     * @responseField data[].translations array Category translations in all languages
-     * @responseField data[].translations[].id integer Translation ID
-     * @responseField data[].translations[].category_id integer Foreign key reference to category
-     * @responseField data[].translations[].lang_code string Language code (qq, uz, or ru)
-     * @responseField data[].translations[].name string Category name in specified language
-     * @responseField data[].translations[].created_at string Translation creation timestamp (ISO 8601 format)
-     * @responseField data[].translations[].updated_at string Translation last update timestamp (ISO 8601 format)
-     * @responseField data[].created_at string Category creation timestamp (ISO 8601 format)
-     * @responseField data[].updated_at string Category last update timestamp (ISO 8601 format)
-     * @responseField code integer HTTP status code
-     *
-     * @response 200 {
-     *   "success": true,
-     *   "message": "Categories retrieved successfully",
-     *   "data": [
-     *     {
-     *       "id": 1,
-     *       "translations": [
-     *         {
-     *           "id": 1,
-     *           "category_id": 1,
-     *           "lang_code": "qq",
-     *           "name": "Salat",
-     *           "created_at": "2024-01-15T10:30:00.000000Z",
-     *           "updated_at": "2024-01-15T10:30:00.000000Z"
-     *         },
-     *         {
-     *           "id": 2,
-     *           "category_id": 1,
-     *           "lang_code": "uz",
-     *           "name": "Salat",
-     *           "created_at": "2024-01-15T10:30:00.000000Z",
-     *           "updated_at": "2024-01-15T10:30:00.000000Z"
-     *         },
-     *         {
-     *           "id": 3,
-     *           "category_id": 1,
-     *           "lang_code": "ru",
-     *           "name": "Салат",
-     *           "created_at": "2024-01-15T10:30:00.000000Z",
-     *           "updated_at": "2024-01-15T10:30:00.000000Z"
-     *         }
-     *       ],
-     *       "created_at": "2024-01-15T10:30:00.000000Z",
-     *       "updated_at": "2024-01-15T10:30:00.000000Z"
-     *     },
-     *     {
-     *       "id": 2,
-     *       "translations": [
-     *         {
-     *           "id": 4,
-     *           "category_id": 2,
-     *           "lang_code": "qq",
-     *           "name": "Hot-dog",
-     *           "created_at": "2024-01-15T10:31:00.000000Z",
-     *           "updated_at": "2024-01-15T10:31:00.000000Z"
-     *         },
-     *         {
-     *           "id": 5,
-     *           "category_id": 2,
-     *           "lang_code": "uz",
-     *           "name": "Hot-dog",
-     *           "created_at": "2024-01-15T10:31:00.000000Z",
-     *           "updated_at": "2024-01-15T10:31:00.000000Z"
-     *         },
-     *         {
-     *           "id": 6,
-     *           "category_id": 2,
-     *           "lang_code": "ru",
-     *           "name": "Хот-дог",
-     *           "created_at": "2024-01-15T10:31:00.000000Z",
-     *           "updated_at": "2024-01-15T10:31:00.000000Z"
-     *         }
-     *       ],
-     *       "created_at": "2024-01-15T10:31:00.000000Z",
-     *       "updated_at": "2024-01-15T10:31:00.000000Z"
-     *     }
-     *   ],
-     *   "code": 200
-     * }
-     *
-     * @response 500 {
-     *   "success": false,
-     *   "message": "Failed to retrieve categories",
-     *   "data": null,
-     *   "code": 500
-     * }
+     *  
+     * 
+     * @OA\Get(
+     *     path="/api/categories",
+     *     operationId="getCategoriesList",
+     *     tags={"Categories"},
+     *     summary="Barcha kategoriyalarni ro'yxatini olish",
+     *     description="Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Bu endpoint autentifikatsiya talab qilmaydi.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Muvaffaqiyatli javob",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Categories retrieved successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="name", type="string", example="Elektronika"),
+     *                     @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
+     *                     @OA\Property(property="products_count", type="integer", example=25),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
+     *                 )
+     *             ),
+     *             @OA\Property(property="code", type="integer", example=200)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Failed to retrieve categories"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=500)
+     *         )
+     *     )
+     * )
      */
     public function index(): JsonResponse
     {
@@ -126,81 +80,86 @@ class CategoryController extends Controller
     }
 
     /**
-     * Create a new category
-     *
-     * @group Category Management
-     * @bodyParam translations array required Array of translation objects (minimum 1). Example: [{"lang_code": "qq", "name": "Pizza"}, {"lang_code": "uz", "name": "Pitsa"}, {"lang_code": "ru", "name": "Пицца"}]
-     * @bodyParam translations[].lang_code string required Language code (qq, uz, or ru). Example: qq
-     * @bodyParam translations[].name string required Category name in specified language (max 255 characters). Example: Pizza
+     * Yangi kategoriya yaratish
      * 
-     * @responseField success boolean Operation success status
-     * @responseField message string Response message
-     * @responseField data object Created category with translations
-     * @responseField data.id integer Category ID
-     * @responseField data.translations array Category translations
-     * @responseField data.translations[].id integer Translation ID
-     * @responseField data.translations[].category_id integer Foreign key reference to category
-     * @responseField data.translations[].lang_code string Language code (qq, uz, or ru)
-     * @responseField data.translations[].name string Category name in specified language
-     * @responseField data.translations[].created_at string Translation creation timestamp (ISO 8601 format)
-     * @responseField data.translations[].updated_at string Translation last update timestamp (ISO 8601 format)
-     * @responseField data.created_at string Category creation timestamp (ISO 8601 format)
-     * @responseField data.updated_at string Category last update timestamp (ISO 8601 format)
-     * @responseField code integer HTTP status code
-     *
-     * @response 201 {
-     *   "success": true,
-     *   "message": "Category created successfully",
-     *   "data": {
-     *     "id": 4,
-     *     "translations": [
-     *       {
-     *         "id": 10,
-     *         "category_id": 4,
-     *         "lang_code": "qq",
-     *         "name": "Pizza",
-     *         "created_at": "2024-01-15T11:00:00.000000Z",
-     *         "updated_at": "2024-01-15T11:00:00.000000Z"
-     *       },
-     *       {
-     *         "id": 11,
-     *         "category_id": 4,
-     *         "lang_code": "uz",
-     *         "name": "Pitsa",
-     *         "created_at": "2024-01-15T11:00:00.000000Z",
-     *         "updated_at": "2024-01-15T11:00:00.000000Z"
-     *       },
-     *       {
-     *         "id": 12,
-     *         "category_id": 4,
-     *         "lang_code": "ru",
-     *         "name": "Пицца",
-     *         "created_at": "2024-01-15T11:00:00.000000Z",
-     *         "updated_at": "2024-01-15T11:00:00.000000Z"
-     *       }
-     *     ],
-     *     "created_at": "2024-01-15T11:00:00.000000Z",
-     *     "updated_at": "2024-01-15T11:00:00.000000Z"
-     *   },
-     *   "code": 201
-     * }
-     *
-     * @response 422 {
-     *   "success": false,
-     *   "message": "Validation error",
-     *   "errors": {
-     *     "translations": ["At least one translation is required"],
-     *     "translations.0.lang_code": ["The language code must be one of: qq, uz, ru"],
-     *     "translations.0.name": ["The category name is required", "The category name has already been taken for this language"]
-     *   }
-     * }
-     *
-     * @response 500 {
-     *   "success": false,
-     *   "message": "Failed to create category",
-     *   "data": null,
-     *   "code": 500
-     * }
+     * @OA\Post(
+     *     path="/api/categories",
+     *     operationId="storeCategory",
+     *     tags={"Categories"},
+     *     summary="Yangi kategoriya qo'shish",
+     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, en).",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Kategoriya ma'lumotlari",
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="object",
+     *                 description="Kategoriya nomi (ko'p tilli)",
+     *                 required={"uz"},
+     *                 @OA\Property(property="uz", type="string", example="Elektronika", description="O'zbek tilida nom"),
+     *                 @OA\Property(property="ru", type="string", example="Электроника", description="Rus tilida nom"),
+     *                 @OA\Property(property="en", type="string", example="Electronics", description="Ingliz tilida nom")
+     *             ),
+     *             @OA\Property(
+     *                 property="description",
+     *                 type="object",
+     *                 description="Kategoriya tavsifi (ko'p tilli)",
+     *                 @OA\Property(property="uz", type="string", example="Barcha elektron qurilmalar", description="O'zbek tilida tavsif"),
+     *                 @OA\Property(property="ru", type="string", example="Все электронные устройства", description="Rus tilida tavsif"),
+     *                 @OA\Property(property="en", type="string", example="All electronic devices", description="Ingliz tilida tavsif")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Kategoriya muvaffaqiyatli yaratildi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Category created successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=5),
+     *                 @OA\Property(property="name", type="string", example="Elektronika"),
+     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             ),
+     *             @OA\Property(property="code", type="integer", example=201)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validatsiya xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The name.uz field is required."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name.uz",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="The name.uz field is required.")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Failed to create category"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=500)
+     *         )
+     *     )
+     * )
      */
     public function store(StoreCategoryRequest $request): JsonResponse
     {
@@ -214,76 +173,65 @@ class CategoryController extends Controller
     }
 
     /**
-     * Get a specific category
-     *
-     * @group Category Management
-     * @urlParam id integer required Category ID. Example: 1
+     * Bitta kategoriyani ko'rish
      * 
-     * @responseField success boolean Operation success status
-     * @responseField message string Response message
-     * @responseField data object Category with translations
-     * @responseField data.id integer Category ID
-     * @responseField data.translations array Category translations
-     * @responseField data.translations[].id integer Translation ID
-     * @responseField data.translations[].category_id integer Foreign key reference to category
-     * @responseField data.translations[].lang_code string Language code (qq, uz, or ru)
-     * @responseField data.translations[].name string Category name in specified language
-     * @responseField data.translations[].created_at string Translation creation timestamp (ISO 8601 format)
-     * @responseField data.translations[].updated_at string Translation last update timestamp (ISO 8601 format)
-     * @responseField data.created_at string Category creation timestamp (ISO 8601 format)
-     * @responseField data.updated_at string Category last update timestamp (ISO 8601 format)
-     * @responseField code integer HTTP status code
-     *
-     * @response 200 {
-     *   "success": true,
-     *   "message": "Category retrieved successfully",
-     *   "data": {
-     *     "id": 1,
-     *     "translations": [
-     *       {
-     *         "id": 1,
-     *         "category_id": 1,
-     *         "lang_code": "qq",
-     *         "name": "Salat",
-     *         "created_at": "2024-01-15T10:30:00.000000Z",
-     *         "updated_at": "2024-01-15T10:30:00.000000Z"
-     *       },
-     *       {
-     *         "id": 2,
-     *         "category_id": 1,
-     *         "lang_code": "uz",
-     *         "name": "Salat",
-     *         "created_at": "2024-01-15T10:30:00.000000Z",
-     *         "updated_at": "2024-01-15T10:30:00.000000Z"
-     *       },
-     *       {
-     *         "id": 3,
-     *         "category_id": 1,
-     *         "lang_code": "ru",
-     *         "name": "Салат",
-     *         "created_at": "2024-01-15T10:30:00.000000Z",
-     *         "updated_at": "2024-01-15T10:30:00.000000Z"
-     *       }
-     *     ],
-     *     "created_at": "2024-01-15T10:30:00.000000Z",
-     *     "updated_at": "2024-01-15T10:30:00.000000Z"
-     *   },
-     *   "code": 200
-     * }
-     *
-     * @response 404 {
-     *   "success": false,
-     *   "message": "Category not found",
-     *   "data": null,
-     *   "code": 404
-     * }
-     *
-     * @response 500 {
-     *   "success": false,
-     *   "message": "Failed to retrieve category",
-     *   "data": null,
-     *   "code": 500
-     * }
+     * @OA\Get(
+     *     path="/api/categories/{id}",
+     *     operationId="getCategoryById",
+     *     tags={"Categories"},
+     *     summary="ID bo'yicha kategoriyani olish",
+     *     description="Berilgan ID raqami bo'yicha kategoriya ma'lumotlarini qaytaradi",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Kategoriya ID raqami",
+     *         required=true,
+     *         example=1,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Kategoriya topildi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Category retrieved successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="Elektronika"),
+     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
+     *                 @OA\Property(property="products_count", type="integer", example=25),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             ),
+     *             @OA\Property(property="code", type="integer", example=200)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Kategoriya topilmadi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Category not found"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Failed to retrieve category"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=500)
+     *         )
+     *     )
+     * )
      */
     public function show(int $id): JsonResponse
     {
@@ -302,87 +250,95 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update a category
-     *
-     * @group Category Management
-     * @urlParam id integer required Category ID. Example: 1
-     * @bodyParam translations array required Array of translation objects (minimum 1). Example: [{"lang_code": "qq", "name": "Fresh Salat"}, {"lang_code": "uz", "name": "Yangi Salat"}, {"lang_code": "ru", "name": "Свежий Салат"}]
-     * @bodyParam translations[].lang_code string required Language code (qq, uz, or ru). Example: uz
-     * @bodyParam translations[].name string required Updated category name in specified language (max 255 characters). Example: Yangi Salat
+     * Kategoriyani yangilash
      * 
-     * @responseField success boolean Operation success status
-     * @responseField message string Response message
-     * @responseField data object Updated category with translations
-     * @responseField data.id integer Category ID
-     * @responseField data.translations array Category translations
-     * @responseField data.translations[].id integer Translation ID
-     * @responseField data.translations[].category_id integer Foreign key reference to category
-     * @responseField data.translations[].lang_code string Language code (qq, uz, or ru)
-     * @responseField data.translations[].name string Category name in specified language
-     * @responseField data.translations[].created_at string Translation creation timestamp (ISO 8601 format)
-     * @responseField data.translations[].updated_at string Translation last update timestamp (ISO 8601 format)
-     * @responseField data.created_at string Category creation timestamp (ISO 8601 format)
-     * @responseField data.updated_at string Category last update timestamp (ISO 8601 format)
-     * @responseField code integer HTTP status code
-     *
-     * @response 200 {
-     *   "success": true,
-     *   "message": "Category updated successfully",
-     *   "data": {
-     *     "id": 1,
-     *     "translations": [
-     *       {
-     *         "id": 1,
-     *         "category_id": 1,
-     *         "lang_code": "qq",
-     *         "name": "Fresh Salat",
-     *         "created_at": "2024-01-15T10:30:00.000000Z",
-     *         "updated_at": "2024-01-15T12:00:00.000000Z"
-     *       },
-     *       {
-     *         "id": 2,
-     *         "category_id": 1,
-     *         "lang_code": "uz",
-     *         "name": "Yangi Salat",
-     *         "created_at": "2024-01-15T10:30:00.000000Z",
-     *         "updated_at": "2024-01-15T12:00:00.000000Z"
-     *       },
-     *       {
-     *         "id": 3,
-     *         "category_id": 1,
-     *         "lang_code": "ru",
-     *         "name": "Свежий Салат",
-     *         "created_at": "2024-01-15T10:30:00.000000Z",
-     *         "updated_at": "2024-01-15T12:00:00.000000Z"
-     *       }
-     *     ],
-     *     "created_at": "2024-01-15T10:30:00.000000Z",
-     *     "updated_at": "2024-01-15T12:00:00.000000Z"
-     *   },
-     *   "code": 200
-     * }
-     *
-     * @response 404 {
-     *   "success": false,
-     *   "message": "Category not found",
-     *   "data": null,
-     *   "code": 404
-     * }
-     *
-     * @response 422 {
-     *   "success": false,
-     *   "message": "Validation error",
-     *   "errors": {
-     *     "translations.0.name": ["The category name has already been taken for this language"]
-     *   }
-     * }
-     *
-     * @response 500 {
-     *   "success": false,
-     *   "message": "Failed to update category",
-     *   "data": null,
-     *   "code": 500
-     * }
+     * @OA\Put(
+     *     path="/api/categories/{id}",
+     *     operationId="updateCategory",
+     *     tags={"Categories"},
+     *     summary="Mavjud kategoriyani yangilash",
+     *     description="ID bo'yicha kategoriya ma'lumotlarini yangilaydi. Barcha maydonlar ixtiyoriy.",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Kategoriya ID raqami",
+     *         required=true,
+     *         example=1,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Yangilanishi kerak bo'lgan ma'lumotlar",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="object",
+     *                 description="Kategoriya nomi (ko'p tilli)",
+     *                 @OA\Property(property="uz", type="string", example="Yangi Elektronika"),
+     *                 @OA\Property(property="ru", type="string", example="Новая Электроника"),
+     *                 @OA\Property(property="en", type="string", example="New Electronics")
+     *             ),
+     *             @OA\Property(
+     *                 property="description",
+     *                 type="object",
+     *                 description="Kategoriya tavsifi (ko'p tilli)",
+     *                 @OA\Property(property="uz", type="string", example="Yangilangan tavsif"),
+     *                 @OA\Property(property="ru", type="string", example="Обновленное описание"),
+     *                 @OA\Property(property="en", type="string", example="Updated description")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Kategoriya muvaffaqiyatli yangilandi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Category updated successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="Yangi Elektronika"),
+     *                 @OA\Property(property="description", type="string", example="Yangilangan tavsif"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             ),
+     *             @OA\Property(property="code", type="integer", example=200)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Kategoriya topilmadi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Category not found"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validatsiya xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Failed to update category"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=500)
+     *         )
+     *     )
+     * )
      */
     public function update(UpdateCategoryRequest $request, string $id): JsonResponse
     {
@@ -402,36 +358,56 @@ class CategoryController extends Controller
     }
 
     /**
-     * Delete a category
-     *
-     * @group Category Management
-     * @urlParam id integer required Category ID. Example: 1
+     * Kategoriyani o'chirish
      * 
-     * @responseField success boolean Operation success status
-     * @responseField message string Response message
-     * @responseField data null No data returned
-     * @responseField code integer HTTP status code
-     *
-     * @response 200 {
-     *   "success": true,
-     *   "message": "Category deleted successfully",
-     *   "data": null,
-     *   "code": 200
-     * }
-     *
-     * @response 404 {
-     *   "success": false,
-     *   "message": "Category not found",
-     *   "data": null,
-     *   "code": 404
-     * }
-     *
-     * @response 500 {
-     *   "success": false,
-     *   "message": "Failed to delete category",
-     *   "data": null,
-     *   "code": 500
-     * }
+     * @OA\Delete(
+     *     path="/api/categories/{id}",
+     *     operationId="deleteCategory",
+     *     tags={"Categories"},
+     *     summary="Kategoriyani o'chirish",
+     *     description="ID bo'yicha kategoriyani tizimdan o'chiradi. Bu amal qaytarib bo'lmaydi!",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="O'chiriladigan kategoriya ID raqami",
+     *         required=true,
+     *         example=1,
+     *         @OA\Schema(type="integer", format="int64")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Kategoriya muvaffaqiyatli o'chirildi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Category deleted successfully"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=200)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Kategoriya topilmadi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Category not found"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Failed to delete category"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=500)
+     *         )
+     *     )
+     * )
      */
     public function destroy(int $id): JsonResponse
     {

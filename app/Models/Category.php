@@ -5,6 +5,17 @@ namespace App\Models;
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *   schema="Category",
+ *   title="Category",
+ *   required={"id","name"},
+ *   @OA\Property(property="id", type="integer", format="int64"),
+ *   @OA\Property(property="name", type="string"),
+ *   @OA\Property(property="description", type="string")
+ * )
+ */
+
 class Category extends Model
 {
     use HasTranslations;

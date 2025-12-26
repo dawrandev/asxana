@@ -9,12 +9,26 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateCategoryRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        // If translations is passed as a JSON-encoded string (e.g., client sent it as a string),
+        // decode it so validation will treat it as an array.
+        $translations = $this->input('translations', null);
+        if (is_string($translations)) {
+            $decoded = json_decode($translations, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $this->merge(['translations' => $decoded]);
+            }
+        }
     }
 
     /**
@@ -29,11 +43,12 @@ class UpdateCategoryRequest extends FormRequest
         $rules = [
             'translations' => 'required|array|min:1',
             'translations.*.lang_code' => 'required|string|in:qq,uz,ru',
-            'tranalations.*.name' => 'required|string|max:255',
+            'translations.*.name' => 'required|string|max:255',
         ];
 
         foreach ($this->input('translations', []) as $index => $translation) {
             if (isset($translation['lang_code'])) {
+                // Append the unique translation rule to the per-index name rule
                 $rules["translations.{$index}.name"][] = new UniqueCategoryTranslation($translation['lang_code'], $categoryId);
             }
         }
