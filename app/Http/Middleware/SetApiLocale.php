@@ -17,7 +17,7 @@ class SetApiLocale
     public function handle(Request $request, Closure $next): Response
     {
         $supportedLocales  = array_keys(config('app.locales'));
-        $defaultLocale    = config('app.fallback_locale', 'qq');
+        $defaultLocale    = config('app.fallback_locale', 'kk');
 
         $locale = $request->header('Accept-Language');
 

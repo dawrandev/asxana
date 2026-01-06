@@ -18,6 +18,7 @@ class UniqueProductTranslation implements ValidationRule
         $query = ProductTranslation::where('lang_code', $this->langCode)
             ->where('name', $value);
 
+        // Faqat BOSHQA mahsulotlardagi tarjimalarni tekshirish
         if ($this->exceptProductId !== null) {
             $query->where('product_id', '!=', $this->exceptProductId);
         }

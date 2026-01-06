@@ -196,7 +196,7 @@ class ProductController extends Controller
      * type="array",
      * description="Turli tillardagi nom va tavsiflar",
      * @OA\Items(
-     * @OA\Property(property="lang_code", type="string", example="uz", description="Til kodi (uz, ru, qq)"),
+     * @OA\Property(property="lang_code", type="string", example="uz", description="Til kodi (uz, ru, kk)"),
      * @OA\Property(property="name", type="string", example="Sezar salat", description="Mahsulot nomi"),
      * @OA\Property(property="description", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi")
      * )
@@ -310,6 +310,51 @@ class ProductController extends Controller
             return $this->jsonResponse(false, 'Failed to update product', null, 500);
         }
     }
+
+    /**
+     * @OA\Delete(
+     * path="/api/v1/products/{id}",
+     * summary="Mahsulotni o'chirish",
+     * description="Mahsulotni bazadan va unga tegishli rasmni server xotirasidan butunlay o'chirib tashlaydi.",
+     * tags={"Products"},
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="O'chirilishi kerak bo'lgan mahsulotning ID raqami",
+     * required=true,
+     * @OA\Schema(
+     * type="integer",
+     * example=1
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Mahsulot muvaffaqiyatli o'chirildi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Product deleted successfully"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=200)
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Mahsulot topilmadi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Product not found")
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Serverda xatolik yuz berdi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Failed to delete product")
+     * )
+     * )
+     * )
+     */
 
     public function destroy(int $id): JsonResponse
     {

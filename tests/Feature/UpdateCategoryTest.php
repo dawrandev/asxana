@@ -14,13 +14,13 @@ class UpdateCategoryTest extends TestCase
     {
         // Create category with initial translations
         $category = Category::create();
-        $category->translations()->create([ 'lang_code' => 'qq', 'name' => 'old1' ]);
-        $category->translations()->create([ 'lang_code' => 'uz', 'name' => 'old2' ]);
-        $category->translations()->create([ 'lang_code' => 'ru', 'name' => 'old3' ]);
+        $category->translations()->create(['lang_code' => 'kk', 'name' => 'old1']);
+        $category->translations()->create(['lang_code' => 'uz', 'name' => 'old2']);
+        $category->translations()->create(['lang_code' => 'ru', 'name' => 'old3']);
 
         $payload = [
             'translations' => [
-                ['lang_code' => 'qq', 'name' => 'shaylar'],
+                ['lang_code' => 'kk', 'name' => 'shaylar'],
                 ['lang_code' => 'uz', 'name' => 'choylar'],
                 ['lang_code' => 'ru', 'name' => 'чай'],
             ]
@@ -35,7 +35,7 @@ class UpdateCategoryTest extends TestCase
 
         $this->assertDatabaseHas('category_translations', [
             'category_id' => $category->id,
-            'lang_code' => 'qq',
+            'lang_code' => 'kk',
             'name' => 'shaylar',
         ]);
     }

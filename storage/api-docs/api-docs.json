@@ -36,7 +36,7 @@
                     {
                         "name": "Accept-Language",
                         "in": "header",
-                        "description": "Tizim tilini belgilash uchun (uz, ru, en). Default: uz",
+                        "description": "Tizim tilini belgilash uchun (uz, ru, kk). Default: uz",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -44,7 +44,7 @@
                             "enum": [
                                 "uz",
                                 "ru",
-                                "en"
+                                "kk"
                             ]
                         },
                         "example": "uz"
@@ -148,7 +148,7 @@
                     "Categories"
                 ],
                 "summary": "Yangi kategoriya qo'shish",
-                "description": "Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, en). Kamida o'zbek tilida nom kiritish majburiy.",
+                "description": "Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, kk). Kamida o'zbek tilida nom kiritish majburiy.",
                 "operationId": "storeCategory",
                 "parameters": [
                     {
@@ -162,7 +162,7 @@
                             "enum": [
                                 "uz",
                                 "ru",
-                                "en"
+                                "kk"
                             ]
                         }
                     }
@@ -196,8 +196,8 @@
                                                 "maxLength": 255,
                                                 "example": "Электроника"
                                             },
-                                            "en": {
-                                                "description": "Ingliz tilida nom (ixtiyoriy)",
+                                            "kk": {
+                                                "description": "Qaraqalpaq tilida nom (ixtiyoriy)",
                                                 "type": "string",
                                                 "maxLength": 255,
                                                 "example": "Electronics"
@@ -361,7 +361,7 @@
                     {
                         "name": "Accept-Language",
                         "in": "header",
-                        "description": "Tizim tilini tanlash (uz, ru, en)",
+                        "description": "Tizim tilini tanlash (uz, ru, kk)",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -369,7 +369,7 @@
                             "enum": [
                                 "uz",
                                 "ru",
-                                "en"
+                                "kk"
                             ]
                         },
                         "example": "uz"
@@ -520,7 +520,7 @@
                             "enum": [
                                 "uz",
                                 "ru",
-                                "en"
+                                "kk"
                             ]
                         }
                     }
@@ -548,8 +548,8 @@
                                                 "maxLength": 255,
                                                 "example": "Новая Электроника"
                                             },
-                                            "en": {
-                                                "description": "Ingliz tilida nom (ixtiyoriy)",
+                                            "kk": {
+                                                "description": "Qaraqalpaq tilida nom (ixtiyoriy)",
                                                 "type": "string",
                                                 "maxLength": 255,
                                                 "example": "New Electronics"
@@ -692,13 +692,13 @@
                                                         "The name.uz field must be at least 2 characters."
                                                     ]
                                                 },
-                                                "description.en": {
+                                                "description.kk": {
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
                                                     },
                                                     "example": [
-                                                        "The description.en field must not exceed 1000 characters."
+                                                        "The description.kk field must not exceed 1000 characters."
                                                     ]
                                                 }
                                             },
@@ -770,7 +770,7 @@
                             "enum": [
                                 "uz",
                                 "ru",
-                                "en"
+                                "kk"
                             ]
                         }
                     }
@@ -1040,7 +1040,7 @@
                                         "items": {
                                             "properties": {
                                                 "lang_code": {
-                                                    "description": "Til kodi (uz, ru, qq)",
+                                                    "description": "Til kodi (uz, ru, kk)",
                                                     "type": "string",
                                                     "example": "uz"
                                                 },
@@ -1384,6 +1384,95 @@
                     },
                     "404": {
                         "description": "Mahsulot topilmadi"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Mahsulotni o'chirish",
+                "description": "Mahsulotni bazadan va unga tegishli rasmni server xotirasidan butunlay o'chirib tashlaydi.",
+                "operationId": "c935132359292f5732d896b035f3f322",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "O'chirilishi kerak bo'lgan mahsulotning ID raqami",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mahsulot muvaffaqiyatli o'chirildi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product deleted successfully"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mahsulot topilmadi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Serverda xatolik yuz berdi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to delete product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }

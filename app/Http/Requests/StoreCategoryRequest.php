@@ -26,7 +26,7 @@ class StoreCategoryRequest extends FormRequest
     {
         $rules = [
             'translations' => 'required|array|min:1',
-            'translations.*.lang_code' => 'required|string|in:qq,uz,ru',
+            'translations.*.lang_code' => 'required|string|in:kk,uz,ru',
             'translations.*.name' => 'required|string|max:255',
         ];
 
@@ -48,7 +48,7 @@ class StoreCategoryRequest extends FormRequest
             'translations.array' => 'Translations must be an array',
             'translations.min' => 'At least one translation is required',
             'translations.*.lang_code.required' => 'The language code is required',
-            'translations.*.lang_code.in' => 'The language code must be one of: qq, uz, ru',
+            'translations.*.lang_code.in' => 'The language code must be one of: kk, uz, ru',
             'translations.*.name.required' => 'The category name is required',
             'translations.*.name.max' => 'The category name may not be greater than 255 characters',
         ];

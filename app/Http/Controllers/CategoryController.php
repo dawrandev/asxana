@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Repositories\CategoryRepository;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -36,10 +37,10 @@ class CategoryController extends Controller
      *         name="Accept-Language",
      *         in="header",
      *         required=false,
-     *         description="Tizim tilini belgilash uchun (uz, ru, qq). Default: uz",
+     *         description="Tizim tilini belgilash uchun (uz, ru, kk). Default: uz",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"uz", "ru", "qq"},
+     *             enum={"uz", "ru", "kk"},
      *             default="uz"
      *         ),
      *         example="uz"
@@ -114,13 +115,13 @@ class CategoryController extends Controller
      *     operationId="storeCategory",
      *     tags={"Categories"},
      *     summary="Yangi kategoriya qo'shish",
-     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, qq). Kamida o'zbek tilida nom kiritish majburiy.",
+     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, kk). Kamida o'zbek tilida nom kiritish majburiy.",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
      *         required=false,
      *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "qq"}, default="uz")
+     *         @OA\Schema(type="string", enum={"uz", "ru", "kk"}, default="uz")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -148,10 +149,10 @@ class CategoryController extends Controller
      *                     maxLength=255
      *                 ),
      *                 @OA\Property(
-     *                     property="qq",
+     *                     property="kk",
      *                     type="string",
      *                     example="Electronics",
-     *                     description="Ingliz tilida nom (ixtiyoriy)",
+     *                     description="Qaraqalpaq tilida nom (ixtiyoriy)",
      *                     maxLength=255
      *                 )
      *             ),
@@ -250,10 +251,10 @@ class CategoryController extends Controller
      *         name="Accept-Language",
      *         in="header",
      *         required=false,
-     *         description="Tizim tilini tanlash (uz, ru, qq)",
+     *         description="Tizim tilini tanlash (uz, ru, kk)",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"uz", "ru", "qq"},
+     *             enum={"uz", "ru", "kk"},
      *             default="uz"
      *         ),
      *         example="uz"
@@ -343,7 +344,7 @@ class CategoryController extends Controller
      *         in="header",
      *         required=false,
      *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "qq"}, default="uz")
+     *         @OA\Schema(type="string", enum={"uz", "ru", "kk"}, default="uz")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -369,10 +370,10 @@ class CategoryController extends Controller
      *                     maxLength=255
      *                 ),
      *                 @OA\Property(
-     *                     property="qq",
+     *                     property="kk",
      *                     type="string",
      *                     example="New Electronics",
-     *                     description="Ingliz tilida nom (ixtiyoriy)",
+     *                     description="Qaraqalpaq tilida nom (ixtiyoriy)",
      *                     maxLength=255
      *                 )
      *             ),
@@ -451,10 +452,10 @@ class CategoryController extends Controller
      *                     example={"The name.uz field must be at least 2 characters."}
      *                 ),
      *                 @OA\Property(
-     *                     property="description.qq",
+     *                     property="description.kk",
      *                     type="array",
      *                     @OA\Items(type="string"),
-     *                     example={"The description.qq field must not exceed 1000 characters."}
+     *                     example={"The description.kk field must not exceed 1000 characters."}
      *                 )
      *             )
      *         )
@@ -515,7 +516,7 @@ class CategoryController extends Controller
      *         in="header",
      *         required=false,
      *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "qq"}, default="uz")
+     *         @OA\Schema(type="string", enum={"uz", "ru", "kk"}, default="uz")
      *     ),
      *     @OA\Response(
      *         response=200,

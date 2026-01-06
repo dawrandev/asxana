@@ -31,7 +31,7 @@ class StoreProductRequest extends FormRequest
             'is_available' => 'sometimes|boolean',
 
             'translations' => 'required|array|min:1',
-            'translations.*.lang_code' => 'required|string|in:qq,uz,ru',
+            'translations.*.lang_code' => 'required|string|in:kk,uz,ru',
             'translations.*.name' => 'required|string|max:255',
             'translations.*.description' => 'nullable|string',
         ];
@@ -53,7 +53,7 @@ class StoreProductRequest extends FormRequest
             'image.required' => 'Mahsulot rasmi yuklanishi shart',
             'price.required' => 'Mahsulot narxi kiritilishi shart',
             'translations.required' => 'Kamida bitta tilda maʼlumot boʻlishi shart',
-            'translations.*.lang_code.in' => 'Til kodi notoʻgʻri (qq, uz, ru boʻlishi kerak)',
+            'translations.*.lang_code.in' => 'Til kodi notoʻgʻri (kk, uz, ru boʻlishi kerak)',
             'translations.*.name.required' => 'Mahsulot nomi kiritilishi shart',
             'translations.*.description.required' => 'Mahsulot tavsifi kiritilishi shart',
         ];

@@ -20,8 +20,6 @@ class UpdateCategoryRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        // If translations is passed as a JSON-encoded string (e.g., client sent it as a string),
-        // decode it so validation will treat it as an array.
         $translations = $this->input('translations', null);
         if (is_string($translations)) {
             $decoded = json_decode($translations, true);
@@ -42,7 +40,7 @@ class UpdateCategoryRequest extends FormRequest
 
         $rules = [
             'translations' => 'required|array|min:1',
-            'translations.*.lang_code' => 'required|string|in:qq,uz,ru',
+            'translations.*.lang_code' => 'required|string|in:kk,uz,ru',
             'translations.*.name' => 'required|string|max:255',
         ];
 
@@ -63,7 +61,7 @@ class UpdateCategoryRequest extends FormRequest
             'translations.array' => 'Translations must be an array',
             'translations.min' => 'At least one translation is required',
             'translations.*.lang_code.required' => 'Language code is required',
-            'translations.*.lang_code.in' => 'Language code must be qq, uz, or ru',
+            'translations.*.lang_code.in' => 'Language code must be kk, uz, or ru',
             'translations.*.name.required' => 'Category name is required',
             'translations.*.name.max' => 'Category name cannot exceed 255 characters',
         ];

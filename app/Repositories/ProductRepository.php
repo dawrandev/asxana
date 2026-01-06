@@ -69,13 +69,19 @@ class ProductRepository
         return DB::transaction(function () use ($product, $productData, $translations) {
             $product->update($productData);
 
-            $product->translations()->delete();
-            foreach ($translations as $translation) {
-                $product->translations()->create($translation);
+            if (!empty($translations)) {
+                $product->translations()->delete();
+
+                foreach ($translations as $translation) {
+                    $product->translations()->create([
+                        'lang_code' => $translation['lang_code'],
+                        'name' => $translation['name'],
+                        'description' => $translation['description'],
+                    ]);
+                }
             }
 
-            $product->touch();
-            return $product->load('translations', 'category');
+            return $product->fresh(['translations', 'category']);
         });
     }
 

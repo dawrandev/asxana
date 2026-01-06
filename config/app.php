@@ -81,7 +81,7 @@ return [
     'locale' => env('APP_LOCALE', 'en'),
 
     'locales' => [
-        'qq' => 'Qaraqalpaq',
+        'kk' => 'Qaraqalpaq',
         'uz' => 'Oʻzbekcha',
         'ru' => 'Русский',
     ],

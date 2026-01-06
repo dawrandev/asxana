@@ -15,21 +15,21 @@ class CategorySeeder extends Seeder
         $categories = [
             [
                 'translations' => [
-                    ['lang_code' => 'qq', 'name' => 'Salat'],
+                    ['lang_code' => 'kk', 'name' => 'Salat'],
                     ['lang_code' => 'uz', 'name' => 'Salat'],
                     ['lang_code' => 'ru', 'name' => 'Салат'],
                 ],
             ],
             [
                 'translations' => [
-                    ['lang_code' => 'qq', 'name' => 'Hot-dog'],
+                    ['lang_code' => 'kk', 'name' => 'Hot-dog'],
                     ['lang_code' => 'uz', 'name' => 'Hot-dog'],
                     ['lang_code' => 'ru', 'name' => 'Хот-дог'],
                 ],
             ],
             [
                 'translations' => [
-                    ['lang_code' => 'qq', 'name' => 'Burger'],
+                    ['lang_code' => 'kk', 'name' => 'Burger'],
                     ['lang_code' => 'uz', 'name' => 'Burger'],
                     ['lang_code' => 'ru', 'name' => 'Бургер'],
                 ],

@@ -20,7 +20,7 @@ class ProductSeeder extends Seeder
                 'image' => 'sezar-salat.jpg',
                 'translations' => [
                     [
-                        'lang_code' => 'qq',
+                        'lang_code' => 'kk',
                         'name' => 'Sezar salat',
                         'description' => 'Tovuq go\'shti, parmezanli klassik Sezar salat'
                     ],
@@ -43,7 +43,7 @@ class ProductSeeder extends Seeder
                 'image' => 'greek-salat.jpg',
                 'translations' => [
                     [
-                        'lang_code' => 'qq',
+                        'lang_code' => 'kk',
                         'name' => 'Grek salat',
                         'description' => 'Feta pınır, zeytun, pomidor, qıyar salat'
                     ],
@@ -66,7 +66,7 @@ class ProductSeeder extends Seeder
                 'image' => 'klassik-hot-dog.jpg',
                 'translations' => [
                     [
-                        'lang_code' => 'qq',
+                        'lang_code' => 'kk',
                         'name' => 'Klassik Hot-dog',
                         'description' => 'Sosiska, xıyar turşısı, ketçup, gorçitsa'
                     ],
@@ -89,7 +89,7 @@ class ProductSeeder extends Seeder
                 'image' => 'chizburger.jpg',
                 'translations' => [
                     [
-                        'lang_code' => 'qq',
+                        'lang_code' => 'kk',
                         'name' => 'Chizburger',
                         'description' => 'Mol go\'shti kotlet, cheddar pınır, pomidor, salat'
                     ],
@@ -112,7 +112,7 @@ class ProductSeeder extends Seeder
                 'image' => 'bekın-burger.jpg',
                 'translations' => [
                     [
-                        'lang_code' => 'qq',
+                        'lang_code' => 'kk',
                         'name' => 'Bekın Burger',
                         'description' => 'Qızarıtılgan bekın, mol go\'shti, BBQ sous'
                     ],
