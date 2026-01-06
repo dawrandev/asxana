@@ -18,8 +18,7 @@ class UniqueProductTranslation implements ValidationRule
         $query = ProductTranslation::where('lang_code', $this->langCode)
             ->where('name', $value);
 
-        // Update jarayonida o'zini tekshirmasligi uchun
-        if ($this->exceptProductId) {
+        if ($this->exceptProductId !== null) {
             $query->where('product_id', '!=', $this->exceptProductId);
         }
 

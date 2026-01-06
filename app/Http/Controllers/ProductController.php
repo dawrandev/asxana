@@ -311,6 +311,23 @@ class ProductController extends Controller
         }
     }
 
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $product = $this->productRepository->getProductById($id);
+
+            if (!$product) {
+                return $this->jsonResponse(false, 'Product not found', null, 404);
+            }
+
+            $this->productService->deleteProduct($product);
+
+            return $this->jsonResponse(true, 'Product deleted successfully', null, 200);
+        } catch (\Exception $e) {
+            return $this->jsonResponse(false, 'Failed to delete product', null, 500);
+        }
+    }
+
     public function jsonResponse($status, $message, $data, $code)
     {
         return response()->json([

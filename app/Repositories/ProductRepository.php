@@ -78,4 +78,12 @@ class ProductRepository
             return $product->load('translations', 'category');
         });
     }
+
+    public function delete(Product $product): void
+    {
+        DB::transaction(function () use ($product) {
+            $product->translations()->delete();
+            $product->delete();
+        });
+    }
 }

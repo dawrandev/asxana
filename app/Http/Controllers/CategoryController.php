@@ -36,10 +36,10 @@ class CategoryController extends Controller
      *         name="Accept-Language",
      *         in="header",
      *         required=false,
-     *         description="Tizim tilini belgilash uchun (uz, ru, en). Default: uz",
+     *         description="Tizim tilini belgilash uchun (uz, ru, qq). Default: uz",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"uz", "ru", "en"},
+     *             enum={"uz", "ru", "qq"},
      *             default="uz"
      *         ),
      *         example="uz"
@@ -114,13 +114,13 @@ class CategoryController extends Controller
      *     operationId="storeCategory",
      *     tags={"Categories"},
      *     summary="Yangi kategoriya qo'shish",
-     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, en). Kamida o'zbek tilida nom kiritish majburiy.",
+     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, qq). Kamida o'zbek tilida nom kiritish majburiy.",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
      *         required=false,
      *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "en"}, default="uz")
+     *         @OA\Schema(type="string", enum={"uz", "ru", "qq"}, default="uz")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -148,7 +148,7 @@ class CategoryController extends Controller
      *                     maxLength=255
      *                 ),
      *                 @OA\Property(
-     *                     property="en",
+     *                     property="qq",
      *                     type="string",
      *                     example="Electronics",
      *                     description="Ingliz tilida nom (ixtiyoriy)",
@@ -250,10 +250,10 @@ class CategoryController extends Controller
      *         name="Accept-Language",
      *         in="header",
      *         required=false,
-     *         description="Tizim tilini tanlash (uz, ru, en)",
+     *         description="Tizim tilini tanlash (uz, ru, qq)",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"uz", "ru", "en"},
+     *             enum={"uz", "ru", "qq"},
      *             default="uz"
      *         ),
      *         example="uz"
@@ -343,7 +343,7 @@ class CategoryController extends Controller
      *         in="header",
      *         required=false,
      *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "en"}, default="uz")
+     *         @OA\Schema(type="string", enum={"uz", "ru", "qq"}, default="uz")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -369,7 +369,7 @@ class CategoryController extends Controller
      *                     maxLength=255
      *                 ),
      *                 @OA\Property(
-     *                     property="en",
+     *                     property="qq",
      *                     type="string",
      *                     example="New Electronics",
      *                     description="Ingliz tilida nom (ixtiyoriy)",
@@ -451,10 +451,10 @@ class CategoryController extends Controller
      *                     example={"The name.uz field must be at least 2 characters."}
      *                 ),
      *                 @OA\Property(
-     *                     property="description.en",
+     *                     property="description.qq",
      *                     type="array",
      *                     @OA\Items(type="string"),
-     *                     example={"The description.en field must not exceed 1000 characters."}
+     *                     example={"The description.qq field must not exceed 1000 characters."}
      *                 )
      *             )
      *         )
@@ -515,7 +515,7 @@ class CategoryController extends Controller
      *         in="header",
      *         required=false,
      *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "en"}, default="uz")
+     *         @OA\Schema(type="string", enum={"uz", "ru", "qq"}, default="uz")
      *     ),
      *     @OA\Response(
      *         response=200,

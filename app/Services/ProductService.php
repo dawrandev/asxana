@@ -64,4 +64,17 @@ class ProductService
             throw $e;
         }
     }
+
+    public function deleteProduct(Product $product): void
+    {
+        try {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $this->productRepository->delete($product);
+        } catch (\Exception $e) {
+            Log::error('Product delete failed: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }
