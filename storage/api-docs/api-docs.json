@@ -15,7 +15,7 @@
     },
     "servers": [
         {
-            "url": "http://asxana.test",
+            "url": "",
             "description": "API Server"
         },
         {
@@ -30,13 +30,13 @@
                     "Categories"
                 ],
                 "summary": "Barcha kategoriyalarni ro'yxatini olish",
-                "description": "Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Bu endpoint autentifikatsiya talab qilmaydi.",
+                "description": "Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Accept-Language header orqali kerakli tilda ma'lumot olishingiz mumkin.",
                 "operationId": "getCategoriesList",
                 "parameters": [
                     {
                         "name": "Accept-Language",
                         "in": "header",
-                        "description": "Tizim tilini belgilash uchun (uz, ru, en)",
+                        "description": "Tizim tilini belgilash uchun (uz, ru, en). Default: uz",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -46,59 +46,65 @@
                                 "ru",
                                 "en"
                             ]
-                        }
+                        },
+                        "example": "uz"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Muvaffaqiyatli javob",
+                        "description": "Muvaffaqiyatli javob - kategoriyalar ro'yxati",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
+                                            "description": "So'rov muvaffaqiyatli bajarildi",
                                             "type": "boolean",
                                             "example": true
                                         },
                                         "message": {
+                                            "description": "Xabar matni",
                                             "type": "string",
                                             "example": "Categories retrieved successfully"
                                         },
                                         "data": {
+                                            "description": "Kategoriyalar ro'yxati",
                                             "type": "array",
                                             "items": {
                                                 "properties": {
                                                     "id": {
+                                                        "description": "Kategoriya ID raqami",
                                                         "type": "integer",
                                                         "example": 1
                                                     },
                                                     "name": {
+                                                        "description": "Kategoriya nomi (tanlangan tilda)",
                                                         "type": "string",
                                                         "example": "Elektronika"
                                                     },
                                                     "description": {
+                                                        "description": "Kategoriya tavsifi",
                                                         "type": "string",
                                                         "example": "Barcha elektron qurilmalar"
                                                     },
-                                                    "products_count": {
-                                                        "type": "integer",
-                                                        "example": 25
-                                                    },
                                                     "created_at": {
+                                                        "description": "Yaratilgan vaqt",
                                                         "type": "string",
                                                         "format": "date-time",
-                                                        "example": "2024-01-15T10:30:00.000000Z"
+                                                        "example": "2024-12-26T10:30:00Z"
                                                     },
                                                     "updated_at": {
+                                                        "description": "Yangilangan vaqt",
                                                         "type": "string",
                                                         "format": "date-time",
-                                                        "example": "2024-01-15T10:30:00.000000Z"
+                                                        "example": "2024-12-26T10:30:00Z"
                                                     }
                                                 },
                                                 "type": "object"
                                             }
                                         },
                                         "code": {
+                                            "description": "HTTP status kodi",
                                             "type": "integer",
                                             "example": 200
                                         }
@@ -136,16 +142,31 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/categories": {
+            },
             "post": {
                 "tags": [
                     "Categories"
                 ],
                 "summary": "Yangi kategoriya qo'shish",
-                "description": "Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, en).",
+                "description": "Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, en). Kamida o'zbek tilida nom kiritish majburiy.",
                 "operationId": "storeCategory",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Tizim tilini belgilash uchun",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "uz",
+                            "enum": [
+                                "uz",
+                                "ru",
+                                "en"
+                            ]
+                        }
+                    }
+                ],
                 "requestBody": {
                     "description": "Kategoriya ma'lumotlari",
                     "required": true,
@@ -157,46 +178,29 @@
                                 ],
                                 "properties": {
                                     "name": {
-                                        "description": "Kategoriya nomi (ko'p tilli)",
+                                        "description": "Kategoriya nomi (ko'p tilli) *",
                                         "required": [
                                             "uz"
                                         ],
                                         "properties": {
                                             "uz": {
-                                                "description": "O'zbek tilida nom",
+                                                "description": "O'zbek tilida nom (majburiy) *",
                                                 "type": "string",
+                                                "maxLength": 255,
+                                                "minLength": 2,
                                                 "example": "Elektronika"
                                             },
                                             "ru": {
-                                                "description": "Rus tilida nom",
+                                                "description": "Rus tilida nom (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 255,
                                                 "example": "Электроника"
                                             },
                                             "en": {
-                                                "description": "Ingliz tilida nom",
+                                                "description": "Ingliz tilida nom (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 255,
                                                 "example": "Electronics"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "description": {
-                                        "description": "Kategoriya tavsifi (ko'p tilli)",
-                                        "properties": {
-                                            "uz": {
-                                                "description": "O'zbek tilida tavsif",
-                                                "type": "string",
-                                                "example": "Barcha elektron qurilmalar"
-                                            },
-                                            "ru": {
-                                                "description": "Rus tilida tavsif",
-                                                "type": "string",
-                                                "example": "Все электронные устройства"
-                                            },
-                                            "en": {
-                                                "description": "Ingliz tilida tavsif",
-                                                "type": "string",
-                                                "example": "All electronic devices"
                                             }
                                         },
                                         "type": "object"
@@ -225,24 +229,29 @@
                                         "data": {
                                             "properties": {
                                                 "id": {
+                                                    "description": "Yangi kategoriya ID raqami",
                                                     "type": "integer",
                                                     "example": 5
                                                 },
                                                 "name": {
+                                                    "description": "Kategoriya nomi",
                                                     "type": "string",
                                                     "example": "Elektronika"
                                                 },
                                                 "description": {
+                                                    "description": "Kategoriya tavsifi",
                                                     "type": "string",
                                                     "example": "Barcha elektron qurilmalar"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
-                                                    "format": "date-time"
+                                                    "format": "date-time",
+                                                    "example": "2024-12-26T10:30:00Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
-                                                    "format": "date-time"
+                                                    "format": "date-time",
+                                                    "example": "2024-12-26T10:30:00Z"
                                                 }
                                             },
                                             "type": "object"
@@ -258,7 +267,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validatsiya xatosi",
+                        "description": "Validatsiya xatosi - majburiy maydonlar to'ldirilmagan yoki noto'g'ri format",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -268,13 +277,26 @@
                                             "example": "The name.uz field is required."
                                         },
                                         "errors": {
+                                            "description": "Xatolar ro'yxati",
                                             "properties": {
                                                 "name.uz": {
                                                     "type": "array",
                                                     "items": {
-                                                        "type": "string",
-                                                        "example": "The name.uz field is required."
-                                                    }
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "The name.uz field is required.",
+                                                        "The name.uz field must be at least 2 characters."
+                                                    ]
+                                                },
+                                                "name.ru": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "The name.ru field must not exceed 255 characters."
+                                                    ]
                                                 }
                                             },
                                             "type": "object"
@@ -315,30 +337,47 @@
                 }
             }
         },
-        "/api/categories/{id}": {
+        "/api/v1/categories/{id}": {
             "get": {
                 "tags": [
                     "Categories"
                 ],
                 "summary": "ID bo'yicha kategoriyani olish",
-                "description": "Berilgan ID raqami bo'yicha kategoriya ma'lumotlarini qaytaradi",
+                "description": "Berilgan ID raqami bo'yicha kategoriya ma'lumotlarini qaytaradi. Accept-Language header orqali kerakli tilda ma'lumot olishingiz mumkin.",
                 "operationId": "getCategoryById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Kategoriya ID raqami",
+                        "description": "Kategoriya ID raqami *",
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "format": "int64"
+                            "format": "int64",
+                            "minimum": 1
                         },
                         "example": 1
+                    },
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Tizim tilini tanlash (uz, ru, en)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "uz",
+                            "enum": [
+                                "uz",
+                                "ru",
+                                "en"
+                            ]
+                        },
+                        "example": "uz"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Kategoriya topildi",
+                        "description": "Kategoriya topildi va muvaffaqiyatli qaytarildi",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -354,28 +393,31 @@
                                         "data": {
                                             "properties": {
                                                 "id": {
+                                                    "description": "Kategoriya ID raqami",
                                                     "type": "integer",
                                                     "example": 1
                                                 },
                                                 "name": {
+                                                    "description": "Kategoriya nomi (tanlangan tilda)",
                                                     "type": "string",
                                                     "example": "Elektronika"
                                                 },
                                                 "description": {
+                                                    "description": "Kategoriya tavsifi",
                                                     "type": "string",
                                                     "example": "Barcha elektron qurilmalar"
                                                 },
-                                                "products_count": {
-                                                    "type": "integer",
-                                                    "example": 25
-                                                },
                                                 "created_at": {
+                                                    "description": "Yaratilgan vaqt",
                                                     "type": "string",
-                                                    "format": "date-time"
+                                                    "format": "date-time",
+                                                    "example": "2024-12-26T10:30:00Z"
                                                 },
                                                 "updated_at": {
+                                                    "description": "Yangilangan vaqt",
                                                     "type": "string",
-                                                    "format": "date-time"
+                                                    "format": "date-time",
+                                                    "example": "2024-12-26T10:30:00Z"
                                                 }
                                             },
                                             "type": "object"
@@ -401,6 +443,7 @@
                                             "example": false
                                         },
                                         "message": {
+                                            "description": "Berilgan ID bo'yicha kategoriya mavjud emas",
                                             "type": "string",
                                             "example": "Category not found"
                                         },
@@ -451,59 +494,88 @@
                     "Categories"
                 ],
                 "summary": "Mavjud kategoriyani yangilash",
-                "description": "ID bo'yicha kategoriya ma'lumotlarini yangilaydi. Barcha maydonlar ixtiyoriy.",
+                "description": "ID bo'yicha kategoriya ma'lumotlarini yangilaydi. Barcha maydonlar ixtiyoriy - faqat o'zgartirmoqchi bo'lgan maydonlarni yuboring.",
                 "operationId": "updateCategory",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Kategoriya ID raqami",
+                        "description": "Kategoriya ID raqami *",
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "format": "int64"
+                            "format": "int64",
+                            "minimum": 1
                         },
                         "example": 1
+                    },
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Tizim tilini belgilash uchun",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "uz",
+                            "enum": [
+                                "uz",
+                                "ru",
+                                "en"
+                            ]
+                        }
                     }
                 ],
                 "requestBody": {
-                    "description": "Yangilanishi kerak bo'lgan ma'lumotlar",
+                    "description": "Yangilanishi kerak bo'lgan ma'lumotlar (barcha maydonlar ixtiyoriy)",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
                                     "name": {
-                                        "description": "Kategoriya nomi (ko'p tilli)",
+                                        "description": "Kategoriya nomi (ko'p tilli, ixtiyoriy)",
                                         "properties": {
                                             "uz": {
+                                                "description": "O'zbek tilida nom (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 255,
+                                                "minLength": 2,
                                                 "example": "Yangi Elektronika"
                                             },
                                             "ru": {
+                                                "description": "Rus tilida nom (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 255,
                                                 "example": "Новая Электроника"
                                             },
                                             "en": {
+                                                "description": "Ingliz tilida nom (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 255,
                                                 "example": "New Electronics"
                                             }
                                         },
                                         "type": "object"
                                     },
                                     "description": {
-                                        "description": "Kategoriya tavsifi (ko'p tilli)",
+                                        "description": "Kategoriya tavsifi (ko'p tilli, ixtiyoriy)",
                                         "properties": {
                                             "uz": {
+                                                "description": "O'zbek tilida tavsif (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 1000,
                                                 "example": "Yangilangan tavsif"
                                             },
                                             "ru": {
+                                                "description": "Rus tilida tavsif (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 1000,
                                                 "example": "Обновленное описание"
                                             },
                                             "en": {
+                                                "description": "Ingliz tilida tavsif (ixtiyoriy)",
                                                 "type": "string",
+                                                "maxLength": 1000,
                                                 "example": "Updated description"
                                             }
                                         },
@@ -537,20 +609,25 @@
                                                     "example": 1
                                                 },
                                                 "name": {
+                                                    "description": "Yangilangan kategoriya nomi",
                                                     "type": "string",
                                                     "example": "Yangi Elektronika"
                                                 },
                                                 "description": {
+                                                    "description": "Yangilangan tavsif",
                                                     "type": "string",
                                                     "example": "Yangilangan tavsif"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
-                                                    "format": "date-time"
+                                                    "format": "date-time",
+                                                    "example": "2024-12-26T10:30:00Z"
                                                 },
                                                 "updated_at": {
+                                                    "description": "Yangilangan vaqt",
                                                     "type": "string",
-                                                    "format": "date-time"
+                                                    "format": "date-time",
+                                                    "example": "2024-12-26T11:45:00Z"
                                                 }
                                             },
                                             "type": "object"
@@ -576,6 +653,7 @@
                                             "example": false
                                         },
                                         "message": {
+                                            "description": "Berilgan ID bo'yicha kategoriya mavjud emas",
                                             "type": "string",
                                             "example": "Category not found"
                                         },
@@ -593,7 +671,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validatsiya xatosi",
+                        "description": "Validatsiya xatosi - noto'g'ri format yoki qiymatlar",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -603,6 +681,27 @@
                                             "example": "The given data was invalid."
                                         },
                                         "errors": {
+                                            "description": "Xatolar ro'yxati",
+                                            "properties": {
+                                                "name.uz": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "The name.uz field must be at least 2 characters."
+                                                    ]
+                                                },
+                                                "description.en": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "The description.en field must not exceed 1000 characters."
+                                                    ]
+                                                }
+                                            },
                                             "type": "object"
                                         }
                                     },
@@ -645,19 +744,35 @@
                     "Categories"
                 ],
                 "summary": "Kategoriyani o'chirish",
-                "description": "ID bo'yicha kategoriyani tizimdan o'chiradi. Bu amal qaytarib bo'lmaydi!",
+                "description": "ID bo'yicha kategoriyani tizimdan butunlay o'chiradi. ⚠️ Diqqat: Bu amal qaytarib bo'lmaydi! O'chirilgan kategoriyani qayta tiklash mumkin emas.",
                 "operationId": "deleteCategory",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "O'chiriladigan kategoriya ID raqami",
+                        "description": "O'chiriladigan kategoriya ID raqami *",
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "format": "int64"
+                            "format": "int64",
+                            "minimum": 1
                         },
                         "example": 1
+                    },
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Tizim tilini belgilash uchun",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "uz",
+                            "enum": [
+                                "uz",
+                                "ru",
+                                "en"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -668,14 +783,17 @@
                                 "schema": {
                                     "properties": {
                                         "success": {
+                                            "description": "Operatsiya muvaffaqiyatli bajarildi",
                                             "type": "boolean",
                                             "example": true
                                         },
                                         "message": {
+                                            "description": "O'chirish muvaffaqiyatli yakunlandi",
                                             "type": "string",
                                             "example": "Category deleted successfully"
                                         },
                                         "data": {
+                                            "description": "O'chirishda qaytariladigan ma'lumot yo'q",
                                             "type": "null"
                                         },
                                         "code": {
@@ -699,6 +817,7 @@
                                             "example": false
                                         },
                                         "message": {
+                                            "description": "Berilgan ID bo'yicha kategoriya mavjud emas yoki avvalroq o'chirilgan",
                                             "type": "string",
                                             "example": "Category not found"
                                         },
@@ -726,6 +845,7 @@
                                             "example": false
                                         },
                                         "message": {
+                                            "description": "O'chirishda xatolik yuz berdi",
                                             "type": "string",
                                             "example": "Failed to delete category"
                                         },
@@ -744,10 +864,576 @@
                     }
                 }
             }
+        },
+        "/api/v1/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Mahsulotlar ro'yxatini olish",
+                "description": "Filtrlar yordamida mahsulotlarni saralab olish va tillar bo'yicha ma'lumotlarni ko'rish",
+                "operationId": "7ca3593d05653d957ae7be1ac648ca44",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Tilni tanlash (uz, ru, kk)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "uz"
+                        }
+                    },
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "description": "Kategoriya bo'yicha filtralsh",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Muvaffaqiyatli yakunlandi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Products retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "category_name": {
+                                                        "type": "string",
+                                                        "example": "Salat"
+                                                    },
+                                                    "image": {
+                                                        "type": "string",
+                                                        "example": "sezar-salat.jpg"
+                                                    },
+                                                    "price": {
+                                                        "type": "integer",
+                                                        "example": 25000
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Sezar salat"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Tovuq go'shti, parmezan bilan klassik Sezar salat"
+                                                    },
+                                                    "is_available": {
+                                                        "type": "boolean",
+                                                        "example": true,
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-12-22T04:52:34.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-12-22T04:52:34.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server xatosi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to retrieve products"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Yangi mahsulot yaratish",
+                "description": "Mahsulot asosiy ma'lumotlari va bir nechta tildagi tarjimalarini rasm bilan birga saqlaydi.",
+                "operationId": "cfdb2a3921bee30f9cad135e1c5f1452",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "category_id",
+                                    "price",
+                                    "image",
+                                    "translations"
+                                ],
+                                "properties": {
+                                    "category_id": {
+                                        "description": "Kategoriya ID raqami",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "price": {
+                                        "description": "Mahsulot narxi",
+                                        "type": "integer",
+                                        "example": 25000
+                                    },
+                                    "is_available": {
+                                        "description": "Sotuvda bor yoki yo'qligi",
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "image": {
+                                        "description": "Mahsulot rasmi (fayl)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "translations": {
+                                        "description": "Turli tillardagi nom va tavsiflar",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "lang_code": {
+                                                    "description": "Til kodi (uz, ru, qq)",
+                                                    "type": "string",
+                                                    "example": "uz"
+                                                },
+                                                "name": {
+                                                    "description": "Mahsulot nomi",
+                                                    "type": "string",
+                                                    "example": "Sezar salat"
+                                                },
+                                                "description": {
+                                                    "description": "Mahsulot tavsifi",
+                                                    "type": "string",
+                                                    "example": "Tovuq go'shti va parmezan bilan"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Mahsulot muvaffaqiyatli yaratildi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product created successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/ProductResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validatsiya xatosi (masalan: rasm formati noto'g'ri yoki nom band)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Serverda xatolik yuz berdi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to create product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/{id}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Bitta mahsulot tafsilotini olish",
+                "description": "ID orqali mahsulot ma'lumotlarini qaytaradi. Headerda yuborilgan tilga qarab nom va tavsif o'zgaradi.",
+                "operationId": "1948ab0c6b14a722ad6d1665cd38e1f1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Mahsulotning ID raqami",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Tilni tanlash (uz, ru, kk)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "uz"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Muvaffaqiyatli yakunlandi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product retrieved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "category_name": {
+                                                    "type": "string",
+                                                    "example": "Salat"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "sezar-salat.jpg"
+                                                },
+                                                "price": {
+                                                    "type": "integer",
+                                                    "example": 25000
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Sezar salat"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Tovuq go'shti, parmezan bilan klassik Sezar salat"
+                                                },
+                                                "is_available": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-12-22T04:52:34.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-12-22T04:52:34.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mahsulot topilmadi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product not found"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server xatosi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to retrieve product"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Mahsulotni tahrirlash",
+                "description": "Eslatma: Rasm yuklashda muammo bo'lmasligi uchun POST metodidan foydalaning va body'da '_method=PUT' yuboring.",
+                "operationId": "b9e4a8996649edabc6570985e351fa6b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Mahsulot ID raqami",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "_method": {
+                                        "type": "string",
+                                        "example": "PUT"
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "price": {
+                                        "type": "integer",
+                                        "example": 30000
+                                    },
+                                    "is_available": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "translations": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "lang_code": {
+                                                    "type": "string",
+                                                    "example": "uz"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Yangi nom"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Yangi tavsif"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Muvaffaqiyatli yangilandi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/ProductResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mahsulot topilmadi"
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
+            "ProductResource": {
+                "title": "Product Resource",
+                "description": "Mahsulot ma'lumotlari modeli",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "category_name": {
+                        "type": "string",
+                        "example": "Salat"
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "https://misol.uz/storage/products/rasm.jpg"
+                    },
+                    "price": {
+                        "type": "integer",
+                        "example": 25000
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Sezar salat"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Tovuqli klassik salat"
+                    },
+                    "is_available": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
             "Category": {
                 "title": "Category",
                 "required": [
@@ -761,9 +1447,6 @@
                     },
                     "name": {
                         "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -774,6 +1457,10 @@
         {
             "name": "Categories",
             "description": "Kategoriyalarni boshqarish uchun API endpointlar"
+        },
+        {
+            "name": "Products",
+            "description": "Mahsulotlarni boshqarish uchun API endpointlar"
         }
     ]
 }

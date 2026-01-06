@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ProductRepository
 {
@@ -44,5 +45,37 @@ class ProductRepository
     public function getProductById(int $id): ?Product
     {
         return Product::with('translations', 'category')->find($id);
+    }
+
+    public function store(array $productData, array $translations): Product
+    {
+        return DB::transaction(function () use ($productData, $translations) {
+            $product = Product::create($productData);
+
+            foreach ($translations as $translation) {
+                $product->translations()->create([
+                    'lang_code'   => $translation['lang_code'],
+                    'name'        => $translation['name'],
+                    'description' => $translation['description'],
+                ]);
+            }
+
+            return $product->load('translations', 'category');
+        });
+    }
+
+    public function update(Product $product, array $productData, array $translations): Product
+    {
+        return DB::transaction(function () use ($product, $productData, $translations) {
+            $product->update($productData);
+
+            $product->translations()->delete();
+            foreach ($translations as $translation) {
+                $product->translations()->create($translation);
+            }
+
+            $product->touch();
+            return $product->load('translations', 'category');
+        });
     }
 }

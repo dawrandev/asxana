@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  *   required={"id","name"},
  *   @OA\Property(property="id", type="integer", format="int64"),
  *   @OA\Property(property="name", type="string"),
- *   @OA\Property(property="description", type="string")
  * )
  */
 

@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Product;
 use App\Repositories\ProductRepository;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
@@ -11,5 +14,54 @@ class ProductService
     public function getProducts(array $data)
     {
         return $this->productRepository->getProducts($data);
+    }
+
+    public function createProduct(array $data): Product
+    {
+        try {
+            $path = $data['image']->store('products', 'public');
+
+            $productData = [
+                'category_id' => $data['category_id'],
+                'image' => $path,
+                'price' => $data['price'],
+                'is_available' => $data['is_available'] ?? true,
+            ];
+
+            $translations = $data['translations'];
+
+            return $this->productRepository->store($productData, $translations);
+        } catch (\Exception $e) {
+            Log::error('Error creating product: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function updateProduct(Product $product, array $data): Product
+    {
+        try {
+            $productData = [
+                'category_id'  => $data['category_id'] ?? $product->category_id,
+                'price'        => $data['price'] ?? $product->price,
+                'is_available' => $data['is_available'] ?? $product->is_available,
+            ];
+
+            // Agar yangi rasm yuklangan bo'lsa
+            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+                // Eski rasmni o'chirish
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                // Yangi rasmni saqlash
+                $productData['image'] = $data['image']->store('products', 'public');
+            }
+
+            $translations = $data['translations'] ?? [];
+
+            return $this->productRepository->update($product, $productData, $translations);
+        } catch (\Exception $e) {
+            Log::error('Product update failed: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }

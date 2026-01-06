@@ -15,8 +15,6 @@ use Illuminate\Http\JsonResponse;
  *     name="Categories",
  *     description="Kategoriyalarni boshqarish uchun API endpointlar"
  * )
- * 
- * 
  */
 class CategoryController extends Controller
 {
@@ -26,58 +24,75 @@ class CategoryController extends Controller
     ) {}
 
     /**
+     * Barcha kategoriyalarni ro'yxatini olish
+     * 
      * @OA\Get(
-     * path="/api/v1/categories",
-     * operationId="getCategoriesList",
-     * tags={"Categories"},
-     * summary="Barcha kategoriyalarni ro'yxatini olish",
-     * description="Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Bu endpoint autentifikatsiya talab qilmaydi.",
-     * * @OA\Parameter(
-     * name="Accept-Language",
-     * in="header",
-     * required=false,
-     * description="Tizim tilini belgilash uchun (uz, ru, en)",
-     * @OA\Schema(
-     * type="string",
-     * enum={"uz", "ru", "en"},
-     * default="uz"
-     * )
-     * ),
-     *
-     * @OA\Response(
-     * response=200,
-     * description="Muvaffaqiyatli javob",
-     * @OA\JsonContent(
-     * type="object",
-     * @OA\Property(property="success", type="boolean", example=true),
-     * @OA\Property(property="message", type="string", example="Categories retrieved successfully"),
-     * @OA\Property(
-     * property="data",
-     * type="array",
-     * @OA\Items(
-     * type="object",
-     * @OA\Property(property="id", type="integer", example=1),
-     * @OA\Property(property="name", type="string", example="Elektronika"),
-     * @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
-     * @OA\Property(property="products_count", type="integer", example=25),
-     * @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
-     * @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
-     * )
-     * ),
-     * @OA\Property(property="code", type="integer", example=200)
-     * )
-     * ),
-     * @OA\Response(
-     * response=500,
-     * description="Server xatosi",
-     * @OA\JsonContent(
-     * type="object",
-     * @OA\Property(property="success", type="boolean", example=false),
-     * @OA\Property(property="message", type="string", example="Failed to retrieve categories"),
-     * @OA\Property(property="data", type="null"),
-     * @OA\Property(property="code", type="integer", example=500)
-     * )
-     * )
+     *     path="/api/v1/categories",
+     *     operationId="getCategoriesList",
+     *     tags={"Categories"},
+     *     summary="Barcha kategoriyalarni ro'yxatini olish",
+     *     description="Tizimda mavjud barcha kategoriyalar ro'yxatini qaytaradi. Accept-Language header orqali kerakli tilda ma'lumot olishingiz mumkin.",
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         required=false,
+     *         description="Tizim tilini belgilash uchun (uz, ru, en). Default: uz",
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"uz", "ru", "en"},
+     *             default="uz"
+     *         ),
+     *         example="uz"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Muvaffaqiyatli javob - kategoriyalar ro'yxati",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="success",
+     *                 type="boolean",
+     *                 example=true,
+     *                 description="So'rov muvaffaqiyatli bajarildi"
+     *             ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Categories retrieved successfully",
+     *                 description="Xabar matni"
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="Kategoriyalar ro'yxati",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1, description="Kategoriya ID raqami"),
+     *                     @OA\Property(property="name", type="string", example="Elektronika", description="Kategoriya nomi (tanlangan tilda)"),
+     *                     @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar", description="Kategoriya tavsifi"),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-12-26T10:30:00Z", description="Yaratilgan vaqt"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-12-26T10:30:00Z", description="Yangilangan vaqt")
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="code",
+     *                 type="integer",
+     *                 example=200,
+     *                 description="HTTP status kodi"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server xatosi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Failed to retrieve categories"),
+     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="code", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function index(): JsonResponse
@@ -99,7 +114,14 @@ class CategoryController extends Controller
      *     operationId="storeCategory",
      *     tags={"Categories"},
      *     summary="Yangi kategoriya qo'shish",
-     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, en).",
+     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, en). Kamida o'zbek tilida nom kiritish majburiy.",
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         required=false,
+     *         description="Tizim tilini belgilash uchun",
+     *         @OA\Schema(type="string", enum={"uz", "ru", "en"}, default="uz")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="Kategoriya ma'lumotlari",
@@ -108,20 +130,31 @@ class CategoryController extends Controller
      *             @OA\Property(
      *                 property="name",
      *                 type="object",
-     *                 description="Kategoriya nomi (ko'p tilli)",
+     *                 description="Kategoriya nomi (ko'p tilli) *",
      *                 required={"uz"},
-     *                 @OA\Property(property="uz", type="string", example="Elektronika", description="O'zbek tilida nom"),
-     *                 @OA\Property(property="ru", type="string", example="Электроника", description="Rus tilida nom"),
-     *                 @OA\Property(property="en", type="string", example="Electronics", description="Ingliz tilida nom")
+     *                 @OA\Property(
+     *                     property="uz",
+     *                     type="string",
+     *                     example="Elektronika",
+     *                     description="O'zbek tilida nom (majburiy) *",
+     *                     minLength=2,
+     *                     maxLength=255
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ru",
+     *                     type="string",
+     *                     example="Электроника",
+     *                     description="Rus tilida nom (ixtiyoriy)",
+     *                     maxLength=255
+     *                 ),
+     *                 @OA\Property(
+     *                     property="en",
+     *                     type="string",
+     *                     example="Electronics",
+     *                     description="Ingliz tilida nom (ixtiyoriy)",
+     *                     maxLength=255
+     *                 )
      *             ),
-     *             @OA\Property(
-     *                 property="description",
-     *                 type="object",
-     *                 description="Kategoriya tavsifi (ko'p tilli)",
-     *                 @OA\Property(property="uz", type="string", example="Barcha elektron qurilmalar", description="O'zbek tilida tavsif"),
-     *                 @OA\Property(property="ru", type="string", example="Все электронные устройства", description="Rus tilida tavsif"),
-     *                 @OA\Property(property="en", type="string", example="All electronic devices", description="Ingliz tilida tavsif")
-     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -134,28 +167,36 @@ class CategoryController extends Controller
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=5),
-     *                 @OA\Property(property="name", type="string", example="Elektronika"),
-     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *                 @OA\Property(property="id", type="integer", example=5, description="Yangi kategoriya ID raqami"),
+     *                 @OA\Property(property="name", type="string", example="Elektronika", description="Kategoriya nomi"),
+     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar", description="Kategoriya tavsifi"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-12-26T10:30:00Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-12-26T10:30:00Z")
      *             ),
      *             @OA\Property(property="code", type="integer", example=201)
      *         )
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Validatsiya xatosi",
+     *         description="Validatsiya xatosi - majburiy maydonlar to'ldirilmagan yoki noto'g'ri format",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="message", type="string", example="The name.uz field is required."),
      *             @OA\Property(
      *                 property="errors",
      *                 type="object",
+     *                 description="Xatolar ro'yxati",
      *                 @OA\Property(
      *                     property="name.uz",
      *                     type="array",
-     *                     @OA\Items(type="string", example="The name.uz field is required.")
+     *                     @OA\Items(type="string"),
+     *                     example={"The name.uz field is required.", "The name.uz field must be at least 2 characters."}
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name.ru",
+     *                     type="array",
+     *                     @OA\Items(type="string"),
+     *                     example={"The name.ru field must not exceed 255 characters."}
      *                 )
      *             )
      *         )
@@ -185,25 +226,41 @@ class CategoryController extends Controller
     }
 
     /**
-     * Bitta kategoriyani ko'rish
+     * ID bo'yicha kategoriyani olish
      * 
      * @OA\Get(
      *     path="/api/v1/categories/{id}",
      *     operationId="getCategoryById",
      *     tags={"Categories"},
      *     summary="ID bo'yicha kategoriyani olish",
-     *     description="Berilgan ID raqami bo'yicha kategoriya ma'lumotlarini qaytaradi",
+     *     description="Berilgan ID raqami bo'yicha kategoriya ma'lumotlarini qaytaradi. Accept-Language header orqali kerakli tilda ma'lumot olishingiz mumkin.",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="Kategoriya ID raqami",
+     *         description="Kategoriya ID raqami *",
      *         required=true,
      *         example=1,
-     *         @OA\Schema(type="integer", format="int64")
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *             minimum=1
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         required=false,
+     *         description="Tizim tilini tanlash (uz, ru, en)",
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"uz", "ru", "en"},
+     *             default="uz"
+     *         ),
+     *         example="uz"
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Kategoriya topildi",
+     *         description="Kategoriya topildi va muvaffaqiyatli qaytarildi",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -211,12 +268,11 @@ class CategoryController extends Controller
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="Elektronika"),
-     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar"),
-     *                 @OA\Property(property="products_count", type="integer", example=25),
-     *                 @OA\Property(property="created_at", type="string", format="date-time"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *                 @OA\Property(property="id", type="integer", example=1, description="Kategoriya ID raqami"),
+     *                 @OA\Property(property="name", type="string", example="Elektronika", description="Kategoriya nomi (tanlangan tilda)"),
+     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar", description="Kategoriya tavsifi"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-12-26T10:30:00Z", description="Yaratilgan vaqt"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-12-26T10:30:00Z", description="Yangilangan vaqt")
      *             ),
      *             @OA\Property(property="code", type="integer", example=200)
      *         )
@@ -227,7 +283,7 @@ class CategoryController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Category not found"),
+     *             @OA\Property(property="message", type="string", example="Category not found", description="Berilgan ID bo'yicha kategoriya mavjud emas"),
      *             @OA\Property(property="data", type="null"),
      *             @OA\Property(property="code", type="integer", example=404)
      *         )
@@ -269,34 +325,82 @@ class CategoryController extends Controller
      *     operationId="updateCategory",
      *     tags={"Categories"},
      *     summary="Mavjud kategoriyani yangilash",
-     *     description="ID bo'yicha kategoriya ma'lumotlarini yangilaydi. Barcha maydonlar ixtiyoriy.",
+     *     description="ID bo'yicha kategoriya ma'lumotlarini yangilaydi. Barcha maydonlar ixtiyoriy - faqat o'zgartirmoqchi bo'lgan maydonlarni yuboring.",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="Kategoriya ID raqami",
+     *         description="Kategoriya ID raqami *",
      *         required=true,
      *         example=1,
-     *         @OA\Schema(type="integer", format="int64")
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *             minimum=1
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         required=false,
+     *         description="Tizim tilini belgilash uchun",
+     *         @OA\Schema(type="string", enum={"uz", "ru", "en"}, default="uz")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Yangilanishi kerak bo'lgan ma'lumotlar",
+     *         description="Yangilanishi kerak bo'lgan ma'lumotlar (barcha maydonlar ixtiyoriy)",
      *         @OA\JsonContent(
      *             @OA\Property(
      *                 property="name",
      *                 type="object",
-     *                 description="Kategoriya nomi (ko'p tilli)",
-     *                 @OA\Property(property="uz", type="string", example="Yangi Elektronika"),
-     *                 @OA\Property(property="ru", type="string", example="Новая Электроника"),
-     *                 @OA\Property(property="en", type="string", example="New Electronics")
+     *                 description="Kategoriya nomi (ko'p tilli, ixtiyoriy)",
+     *                 @OA\Property(
+     *                     property="uz",
+     *                     type="string",
+     *                     example="Yangi Elektronika",
+     *                     description="O'zbek tilida nom (ixtiyoriy)",
+     *                     minLength=2,
+     *                     maxLength=255
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ru",
+     *                     type="string",
+     *                     example="Новая Электроника",
+     *                     description="Rus tilida nom (ixtiyoriy)",
+     *                     maxLength=255
+     *                 ),
+     *                 @OA\Property(
+     *                     property="en",
+     *                     type="string",
+     *                     example="New Electronics",
+     *                     description="Ingliz tilida nom (ixtiyoriy)",
+     *                     maxLength=255
+     *                 )
      *             ),
      *             @OA\Property(
      *                 property="description",
      *                 type="object",
-     *                 description="Kategoriya tavsifi (ko'p tilli)",
-     *                 @OA\Property(property="uz", type="string", example="Yangilangan tavsif"),
-     *                 @OA\Property(property="ru", type="string", example="Обновленное описание"),
-     *                 @OA\Property(property="en", type="string", example="Updated description")
+     *                 description="Kategoriya tavsifi (ko'p tilli, ixtiyoriy)",
+     *                 @OA\Property(
+     *                     property="uz",
+     *                     type="string",
+     *                     example="Yangilangan tavsif",
+     *                     description="O'zbek tilida tavsif (ixtiyoriy)",
+     *                     maxLength=1000
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ru",
+     *                     type="string",
+     *                     example="Обновленное описание",
+     *                     description="Rus tilida tavsif (ixtiyoriy)",
+     *                     maxLength=1000
+     *                 ),
+     *                 @OA\Property(
+     *                     property="en",
+     *                     type="string",
+     *                     example="Updated description",
+     *                     description="Ingliz tilida tavsif (ixtiyoriy)",
+     *                     maxLength=1000
+     *                 )
      *             )
      *         )
      *     ),
@@ -311,10 +415,10 @@ class CategoryController extends Controller
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="Yangi Elektronika"),
-     *                 @OA\Property(property="description", type="string", example="Yangilangan tavsif"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *                 @OA\Property(property="name", type="string", example="Yangi Elektronika", description="Yangilangan kategoriya nomi"),
+     *                 @OA\Property(property="description", type="string", example="Yangilangan tavsif", description="Yangilangan tavsif"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-12-26T10:30:00Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-12-26T11:45:00Z", description="Yangilangan vaqt")
      *             ),
      *             @OA\Property(property="code", type="integer", example=200)
      *         )
@@ -325,18 +429,34 @@ class CategoryController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Category not found"),
+     *             @OA\Property(property="message", type="string", example="Category not found", description="Berilgan ID bo'yicha kategoriya mavjud emas"),
      *             @OA\Property(property="data", type="null"),
      *             @OA\Property(property="code", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Validatsiya xatosi",
+     *         description="Validatsiya xatosi - noto'g'ri format yoki qiymatlar",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="message", type="string", example="The given data was invalid."),
-     *             @OA\Property(property="errors", type="object")
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 description="Xatolar ro'yxati",
+     *                 @OA\Property(
+     *                     property="name.uz",
+     *                     type="array",
+     *                     @OA\Items(type="string"),
+     *                     example={"The name.uz field must be at least 2 characters."}
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description.en",
+     *                     type="array",
+     *                     @OA\Items(type="string"),
+     *                     example={"The description.en field must not exceed 1000 characters."}
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -377,23 +497,34 @@ class CategoryController extends Controller
      *     operationId="deleteCategory",
      *     tags={"Categories"},
      *     summary="Kategoriyani o'chirish",
-     *     description="ID bo'yicha kategoriyani tizimdan o'chiradi. Bu amal qaytarib bo'lmaydi!",
+     *     description="ID bo'yicha kategoriyani tizimdan butunlay o'chiradi. ⚠️ Diqqat: Bu amal qaytarib bo'lmaydi! O'chirilgan kategoriyani qayta tiklash mumkin emas.",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="O'chiriladigan kategoriya ID raqami",
+     *         description="O'chiriladigan kategoriya ID raqami *",
      *         required=true,
      *         example=1,
-     *         @OA\Schema(type="integer", format="int64")
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *             minimum=1
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         required=false,
+     *         description="Tizim tilini belgilash uchun",
+     *         @OA\Schema(type="string", enum={"uz", "ru", "en"}, default="uz")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Kategoriya muvaffaqiyatli o'chirildi",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Category deleted successfully"),
-     *             @OA\Property(property="data", type="null"),
+     *             @OA\Property(property="success", type="boolean", example=true, description="Operatsiya muvaffaqiyatli bajarildi"),
+     *             @OA\Property(property="message", type="string", example="Category deleted successfully", description="O'chirish muvaffaqiyatli yakunlandi"),
+     *             @OA\Property(property="data", type="null", description="O'chirishda qaytariladigan ma'lumot yo'q"),
      *             @OA\Property(property="code", type="integer", example=200)
      *         )
      *     ),
@@ -403,7 +534,7 @@ class CategoryController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Category not found"),
+     *             @OA\Property(property="message", type="string", example="Category not found", description="Berilgan ID bo'yicha kategoriya mavjud emas yoki avvalroq o'chirilgan"),
      *             @OA\Property(property="data", type="null"),
      *             @OA\Property(property="code", type="integer", example=404)
      *         )
@@ -414,7 +545,7 @@ class CategoryController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Failed to delete category"),
+     *             @OA\Property(property="message", type="string", example="Failed to delete category", description="O'chirishda xatolik yuz berdi"),
      *             @OA\Property(property="data", type="null"),
      *             @OA\Property(property="code", type="integer", example=500)
      *         )
@@ -437,6 +568,15 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * JSON javob qaytaruvchi yordamchi metod
+     * 
+     * @param bool $status Operatsiya holati (true/false)
+     * @param string $message Xabar matni
+     * @param mixed $data Qaytariladigan ma'lumot
+     * @param int $code HTTP status kodi
+     * @return JsonResponse
+     */
     public function jsonResponse($status, $message, $data, $code): JsonResponse
     {
         return response()->json([

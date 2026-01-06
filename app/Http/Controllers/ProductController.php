@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductFilterRequest;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Repositories\ProductRepository;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @OA\Tag(
+ *     name="Products",
+ *     description="Mahsulotlarni boshqarish uchun API endpointlar"
+ * )
+ */
 class ProductController extends Controller
 {
     public function __construct(
@@ -16,6 +24,62 @@ class ProductController extends Controller
         protected ProductRepository $productRepository
     ) {}
 
+    /**
+     * @OA\Get(
+     * path="/api/v1/products",
+     * summary="Mahsulotlar ro'yxatini olish",
+     * description="Filtrlar yordamida mahsulotlarni saralab olish va tillar bo'yicha ma'lumotlarni ko'rish",
+     * tags={"Products"},
+     * @OA\Parameter(
+     * name="Accept-Language",
+     * in="header",
+     * description="Tilni tanlash (uz, ru, kk)",
+     * required=false,
+     * @OA\Schema(type="string", default="uz")
+     * ),
+     * @OA\Parameter(
+     * name="category_id",
+     * in="query",
+     * description="Kategoriya bo'yicha filtralsh",
+     * required=false,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Muvaffaqiyatli yakunlandi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Products retrieved successfully"),
+     * @OA\Property(
+     * property="data",
+     * type="array",
+     * @OA\Items(
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="category_name", type="string", example="Salat"),
+     * @OA\Property(property="image", type="string", example="sezar-salat.jpg"),
+     * @OA\Property(property="price", type="integer", example=25000),
+     * @OA\Property(property="name", type="string", example="Sezar salat"),
+     * @OA\Property(property="description", type="string", example="Tovuq go'shti, parmezan bilan klassik Sezar salat"),
+     * @OA\Property(property="is_available", type="boolean", example=true, nullable=true),
+     * @OA\Property(property="created_at", type="string", format="date-time", example="2025-12-22T04:52:34.000000Z"),
+     * @OA\Property(property="updated_at", type="string", format="date-time", example="2025-12-22T04:52:34.000000Z")
+     * )
+     * ),
+     * @OA\Property(property="code", type="integer", example=200)
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Server xatosi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Failed to retrieve products"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=500)
+     * )
+     * )
+     * )
+     */
     public function index(ProductFilterRequest $request): JsonResponse
     {
         try {
@@ -26,6 +90,224 @@ class ProductController extends Controller
             return $this->jsonResponse(true, 'Products retrieved successfully', $data, 200);
         } catch (\Exception $e) {
             return $this->jsonResponse(false, 'Failed to retrieve products', null, 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     * path="/api/v1/products/{id}",
+     * summary="Bitta mahsulot tafsilotini olish",
+     * description="ID orqali mahsulot ma'lumotlarini qaytaradi. Headerda yuborilgan tilga qarab nom va tavsif o'zgaradi.",
+     * tags={"Products"},
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="Mahsulotning ID raqami",
+     * required=true,
+     * @OA\Schema(type="integer", example=1)
+     * ),
+     * @OA\Parameter(
+     * name="Accept-Language",
+     * in="header",
+     * description="Tilni tanlash (uz, ru, kk)",
+     * required=false,
+     * @OA\Schema(type="string", default="uz")
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Muvaffaqiyatli yakunlandi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Product retrieved successfully"),
+     * @OA\Property(
+     * property="data",
+     * type="object",
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="category_name", type="string", example="Salat"),
+     * @OA\Property(property="image", type="string", example="sezar-salat.jpg"),
+     * @OA\Property(property="price", type="integer", example=25000),
+     * @OA\Property(property="name", type="string", example="Sezar salat"),
+     * @OA\Property(property="description", type="string", example="Tovuq go'shti, parmezan bilan klassik Sezar salat"),
+     * @OA\Property(property="is_available", type="boolean", example=true),
+     * @OA\Property(property="created_at", type="string", format="date-time", example="2025-12-22T04:52:34.000000Z"),
+     * @OA\Property(property="updated_at", type="string", format="date-time", example="2025-12-22T04:52:34.000000Z")
+     * ),
+     * @OA\Property(property="code", type="integer", example=200)
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Mahsulot topilmadi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Product not found"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=404)
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Server xatosi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Failed to retrieve product"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=500)
+     * )
+     * )
+     * )
+     */
+
+    public function show(int $id): JsonResponse
+    {
+        try {
+            $product = $this->productRepository->getProductById($id);
+
+            if (!$product) {
+                return $this->jsonResponse(false, 'Product not found', null, 404);
+            }
+
+            $data = new ProductResource($product);
+
+            return $this->jsonResponse(true, 'Product retrieved successfully', $data, 200);
+        } catch (\Exception $e) {
+            return $this->jsonResponse(false, 'Failed to retrieve product', null, 500);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     * path="/api/v1/products",
+     * summary="Yangi mahsulot yaratish",
+     * description="Mahsulot asosiy ma'lumotlari va bir nechta tildagi tarjimalarini rasm bilan birga saqlaydi.",
+     * tags={"Products"},
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\MediaType(
+     * mediaType="multipart/form-data",
+     * @OA\Schema(
+     * required={"category_id", "price", "image", "translations"},
+     * @OA\Property(property="category_id", type="integer", example=1, description="Kategoriya ID raqami"),
+     * @OA\Property(property="price", type="integer", example=25000, description="Mahsulot narxi"),
+     * @OA\Property(property="is_available", type="boolean", example=true, description="Sotuvda bor yoki yo'qligi"),
+     * @OA\Property(property="image", type="string", format="binary", description="Mahsulot rasmi (fayl)"),
+     * @OA\Property(
+     * property="translations",
+     * type="array",
+     * description="Turli tillardagi nom va tavsiflar",
+     * @OA\Items(
+     * @OA\Property(property="lang_code", type="string", example="uz", description="Til kodi (uz, ru, qq)"),
+     * @OA\Property(property="name", type="string", example="Sezar salat", description="Mahsulot nomi"),
+     * @OA\Property(property="description", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi")
+     * )
+     * )
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="Mahsulot muvaffaqiyatli yaratildi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Product created successfully"),
+     * @OA\Property(property="data", type="object", ref="#/components/schemas/ProductResource"),
+     * @OA\Property(property="code", type="integer", example=201)
+     * )
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Validatsiya xatosi (masalan: rasm formati noto'g'ri yoki nom band)",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Validation error"),
+     * @OA\Property(property="errors", type="object")
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Serverda xatolik yuz berdi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Failed to create product")
+     * )
+     * )
+     * )
+     */
+
+    public function store(StoreProductRequest $request): JsonResponse
+    {
+        try {
+            $product = $this->productService->createProduct($request->validated());
+
+            $data = new ProductResource($product);
+
+            return $this->jsonResponse(true, 'Product created successfully', $data, 201);
+        } catch (\Exception $e) {
+            return $this->jsonResponse(false, 'Failed to create product: ' . $e->getMessage(), null, 500);
+        }
+    }
+
+    /**
+     * @OA\PUT(
+     * path="/api/v1/products/{id}",
+     * summary="Mahsulotni tahrirlash",
+     * description="Eslatma: Rasm yuklashda muammo bo'lmasligi uchun POST metodidan foydalaning va body'da '_method=PUT' yuboring.",
+     * tags={"Products"},
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * required=true,
+     * description="Mahsulot ID raqami",
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\MediaType(
+     * mediaType="multipart/form-data",
+     * @OA\Schema(
+     * @OA\Property(property="_method", type="string", example="PUT"),
+     * @OA\Property(property="category_id", type="integer", example=1),
+     * @OA\Property(property="price", type="integer", example=30000),
+     * @OA\Property(property="is_available", type="boolean", example=true),
+     * @OA\Property(property="image", type="string", format="binary"),
+     * @OA\Property(
+     * property="translations",
+     * type="array",
+     * @OA\Items(
+     * @OA\Property(property="lang_code", type="string", example="uz"),
+     * @OA\Property(property="name", type="string", example="Yangi nom"),
+     * @OA\Property(property="description", type="string", example="Yangi tavsif")
+     * )
+     * )
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Muvaffaqiyatli yangilandi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="data", ref="#/components/schemas/ProductResource")
+     * )
+     * ),
+     * @OA\Response(response=404, description="Mahsulot topilmadi")
+     * )
+     */
+
+    public function update(UpdateProductRequest $request, int $id): JsonResponse
+    {
+        try {
+            $product = $this->productRepository->getProductById($id);
+
+            if (!$product) {
+                return $this->jsonResponse(false, 'Product not found', null, 404);
+            }
+
+            $updatedProduct = $this->productService->updateProduct($product, $request->validated());
+
+            return $this->jsonResponse(true, 'Product updated successfully', new ProductResource($updatedProduct), 200);
+        } catch (\Exception $e) {
+            return $this->jsonResponse(false, 'Failed to update product', null, 500);
         }
     }
 
