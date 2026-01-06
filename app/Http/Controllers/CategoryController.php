@@ -108,111 +108,31 @@ class CategoryController extends Controller
     }
 
     /**
-     * Yangi kategoriya yaratish
-     * 
      * @OA\Post(
-     *     path="/api/v1/categories",
-     *     operationId="storeCategory",
-     *     tags={"Categories"},
-     *     summary="Yangi kategoriya qo'shish",
-     *     description="Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, kk). Kamida o'zbek tilida nom kiritish majburiy.",
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         required=false,
-     *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "kk"}, default="uz")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         description="Kategoriya ma'lumotlari",
-     *         @OA\JsonContent(
-     *             required={"name"},
-     *             @OA\Property(
-     *                 property="name",
-     *                 type="object",
-     *                 description="Kategoriya nomi (ko'p tilli) *",
-     *                 required={"uz"},
-     *                 @OA\Property(
-     *                     property="uz",
-     *                     type="string",
-     *                     example="Elektronika",
-     *                     description="O'zbek tilida nom (majburiy) *",
-     *                     minLength=2,
-     *                     maxLength=255
-     *                 ),
-     *                 @OA\Property(
-     *                     property="ru",
-     *                     type="string",
-     *                     example="Электроника",
-     *                     description="Rus tilida nom (ixtiyoriy)",
-     *                     maxLength=255
-     *                 ),
-     *                 @OA\Property(
-     *                     property="kk",
-     *                     type="string",
-     *                     example="Electronics",
-     *                     description="Qaraqalpaq tilida nom (ixtiyoriy)",
-     *                     maxLength=255
-     *                 )
-     *             ),
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Kategoriya muvaffaqiyatli yaratildi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Category created successfully"),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=5, description="Yangi kategoriya ID raqami"),
-     *                 @OA\Property(property="name", type="string", example="Elektronika", description="Kategoriya nomi"),
-     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar", description="Kategoriya tavsifi"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-12-26T10:30:00Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-12-26T10:30:00Z")
-     *             ),
-     *             @OA\Property(property="code", type="integer", example=201)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validatsiya xatosi - majburiy maydonlar to'ldirilmagan yoki noto'g'ri format",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="The name.uz field is required."),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 description="Xatolar ro'yxati",
-     *                 @OA\Property(
-     *                     property="name.uz",
-     *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     example={"The name.uz field is required.", "The name.uz field must be at least 2 characters."}
-     *                 ),
-     *                 @OA\Property(
-     *                     property="name.ru",
-     *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     example={"The name.ru field must not exceed 255 characters."}
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Server xatosi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Failed to create category"),
-     *             @OA\Property(property="data", type="null"),
-     *             @OA\Property(property="code", type="integer", example=500)
-     *         )
-     *     )
+     * path="/api/v1/categories",
+     * summary="Yangi kategoriya qo'shish",
+     * tags={"Categories"},
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * required={"translations"},
+     * @OA\Property(
+     * property="translations",
+     * type="array",
+     * description="Kategoriya nomlarining tarjimalari",
+     * @OA\Items(
+     * type="object",
+     * required={"lang_code", "name"},
+     * @OA\Property(property="lang_code", type="string", example="uz", description="Til kodi (uz, ru, kk)"),
+     * @OA\Property(property="name", type="string", example="Gamburger", description="Kategoriya nomi")
+     * )
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="Muvaffaqiyatli yaratildi"
+     * )
      * )
      */
     public function store(StoreCategoryRequest $request): JsonResponse

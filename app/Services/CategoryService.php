@@ -13,24 +13,20 @@ class CategoryService
 
     public function createCategory(array $data): Category
     {
-        try {
-            return DB::transaction(function () use ($data) {
-                $category = Category::create();
+        return DB::transaction(function () use ($data) {
+            $category = Category::create();
 
-                foreach ($data['translations'] as $translation) {
-                    $category->translations()->create([
-                        'lang_code' => $translation['lang_code'],
-                        'name' => $translation['name']
-                    ]);
-                }
+            $translations = collect($data['translations'])->map(function ($item) {
+                return [
+                    'lang_code' => $item['lang_code'],
+                    'name' => $item['name']
+                ];
+            })->toArray();
 
-                return $category->load('translations');
-            });
-        } catch (\Exception $e) {
-            Log::error('Error creating category: ' . $e->getMessage());
+            $category->translations()->createMany($translations);
 
-            throw $e;
-        }
+            return $category->load('translations');
+        });
     }
 
     public function getCategoryById(int $id): ?Category

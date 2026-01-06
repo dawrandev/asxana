@@ -148,62 +148,38 @@
                     "Categories"
                 ],
                 "summary": "Yangi kategoriya qo'shish",
-                "description": "Tizimga yangi kategoriya qo'shadi. Nom maydonlari ko'p tillidir (uz, ru, kk). Kamida o'zbek tilida nom kiritish majburiy.",
-                "operationId": "storeCategory",
-                "parameters": [
-                    {
-                        "name": "Accept-Language",
-                        "in": "header",
-                        "description": "Tizim tilini belgilash uchun",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "default": "uz",
-                            "enum": [
-                                "uz",
-                                "ru",
-                                "kk"
-                            ]
-                        }
-                    }
-                ],
+                "operationId": "cc8c3a3908a8b33010785820dbe9906f",
                 "requestBody": {
-                    "description": "Kategoriya ma'lumotlari",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name"
+                                    "translations"
                                 ],
                                 "properties": {
-                                    "name": {
-                                        "description": "Kategoriya nomi (ko'p tilli) *",
-                                        "required": [
-                                            "uz"
-                                        ],
-                                        "properties": {
-                                            "uz": {
-                                                "description": "O'zbek tilida nom (majburiy) *",
-                                                "type": "string",
-                                                "maxLength": 255,
-                                                "minLength": 2,
-                                                "example": "Elektronika"
+                                    "translations": {
+                                        "description": "Kategoriya nomlarining tarjimalari",
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "lang_code",
+                                                "name"
+                                            ],
+                                            "properties": {
+                                                "lang_code": {
+                                                    "description": "Til kodi (uz, ru, kk)",
+                                                    "type": "string",
+                                                    "example": "uz"
+                                                },
+                                                "name": {
+                                                    "description": "Kategoriya nomi",
+                                                    "type": "string",
+                                                    "example": "Gamburger"
+                                                }
                                             },
-                                            "ru": {
-                                                "description": "Rus tilida nom (ixtiyoriy)",
-                                                "type": "string",
-                                                "maxLength": 255,
-                                                "example": "Электроника"
-                                            },
-                                            "kk": {
-                                                "description": "Qaraqalpaq tilida nom (ixtiyoriy)",
-                                                "type": "string",
-                                                "maxLength": 255,
-                                                "example": "Electronics"
-                                            }
-                                        },
-                                        "type": "object"
+                                            "type": "object"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -213,126 +189,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Kategoriya muvaffaqiyatli yaratildi",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Category created successfully"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "id": {
-                                                    "description": "Yangi kategoriya ID raqami",
-                                                    "type": "integer",
-                                                    "example": 5
-                                                },
-                                                "name": {
-                                                    "description": "Kategoriya nomi",
-                                                    "type": "string",
-                                                    "example": "Elektronika"
-                                                },
-                                                "description": {
-                                                    "description": "Kategoriya tavsifi",
-                                                    "type": "string",
-                                                    "example": "Barcha elektron qurilmalar"
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-12-26T10:30:00Z"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-12-26T10:30:00Z"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "code": {
-                                            "type": "integer",
-                                            "example": 201
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validatsiya xatosi - majburiy maydonlar to'ldirilmagan yoki noto'g'ri format",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The name.uz field is required."
-                                        },
-                                        "errors": {
-                                            "description": "Xatolar ro'yxati",
-                                            "properties": {
-                                                "name.uz": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "example": [
-                                                        "The name.uz field is required.",
-                                                        "The name.uz field must be at least 2 characters."
-                                                    ]
-                                                },
-                                                "name.ru": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "example": [
-                                                        "The name.ru field must not exceed 255 characters."
-                                                    ]
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server xatosi",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Failed to create category"
-                                        },
-                                        "data": {
-                                            "type": "null"
-                                        },
-                                        "code": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Muvaffaqiyatli yaratildi"
                     }
                 }
             }
