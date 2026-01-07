@@ -13,7 +13,7 @@ Route::prefix('v1')->middleware('set-api-locale')->group(function () {
         Route::get('/', [\App\Http\Controllers\CategoryController::class, 'index']);
         Route::post('/', [\App\Http\Controllers\CategoryController::class, 'store']);
         Route::get('/{id}', [\App\Http\Controllers\CategoryController::class, 'show']);
-        Route::match(['put', 'patch'], '/{id}', [\App\Http\Controllers\CategoryController::class, 'update']);
+        Route::put('/{id}', [\App\Http\Controllers\CategoryController::class, 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
     });
 

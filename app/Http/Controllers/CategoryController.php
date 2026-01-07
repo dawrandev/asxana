@@ -109,48 +109,59 @@ class CategoryController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/categories",
-     *     summary="Yangi kategoriya qo'shish",
-     *     tags={"Categories"},
-     *
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"name"},
-     *             @OA\Property(
-     *                 property="name",
-     *                 type="object",
-     *                 description="Kategoriya nomlari (til bo‘yicha)",
-     *                 @OA\Property(
-     *                     property="kk",
-     *                     type="string",
-     *                     example="Patir",
-     *                     description="Qoraqalpoqcha nom"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="uz",
-     *                     type="string",
-     *                     example="Pa'tir",
-     *                     description="O‘zbekcha nom"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="ru",
-     *                     type="string",
-     *                     example="Патир",
-     *                     description="Ruscha nom"
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *
-     *     @OA\Response(
-     *         response=201,
-     *         description="Kategoriya muvaffaqiyatli yaratildi"
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validatsiya xatosi"
-     *     )
+     * path="/api/v1/categories",
+     * summary="Yangi kategoriya qo'shish",
+     * tags={"Categories"},
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * required={"name"},
+     * @OA\Property(
+     * property="name",
+     * type="object",
+     * description="Kategoriya nomlari (til bo‘yicha)",
+     * @OA\Property(property="kk", type="string", example="Patir"),
+     * @OA\Property(property="uz", type="string", example="Pa'tir"),
+     * @OA\Property(property="ru", type="string", example="Патир")
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="Kategoriya muvaffaqiyatli yaratildi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Category created successfully"),
+     * @OA\Property(
+     * property="data",
+     * type="object",
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="name", type="string", example="Pa'tir"),
+     * @OA\Property(property="description", type="string", example=null),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * ),
+     * @OA\Property(property="code", type="integer", example=201)
+     * )
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Validatsiya xatosi",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="The given data was invalid."),
+     * @OA\Property(property="errors", type="object")
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Server xatosi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Failed to create category"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=500)
+     * )
+     * )
      * )
      */
 
@@ -258,158 +269,63 @@ class CategoryController extends Controller
     }
 
     /**
-     * Kategoriyani yangilash
-     * 
      * @OA\Put(
-     *     path="/api/v1/categories/{id}",
-     *     operationId="updateCategory",
-     *     tags={"Categories"},
-     *     summary="Mavjud kategoriyani yangilash",
-     *     description="ID bo'yicha kategoriya ma'lumotlarini yangilaydi. Barcha maydonlar ixtiyoriy - faqat o'zgartirmoqchi bo'lgan maydonlarni yuboring.",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="Kategoriya ID raqami *",
-     *         required=true,
-     *         example=1,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64",
-     *             minimum=1
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         required=false,
-     *         description="Tizim tilini belgilash uchun",
-     *         @OA\Schema(type="string", enum={"uz", "ru", "kk"}, default="uz")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         description="Yangilanishi kerak bo'lgan ma'lumotlar (barcha maydonlar ixtiyoriy)",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="name",
-     *                 type="object",
-     *                 description="Kategoriya nomi (ko'p tilli, ixtiyoriy)",
-     *                 @OA\Property(
-     *                     property="uz",
-     *                     type="string",
-     *                     example="Yangi Elektronika",
-     *                     description="O'zbek tilida nom (ixtiyoriy)",
-     *                     minLength=2,
-     *                     maxLength=255
-     *                 ),
-     *                 @OA\Property(
-     *                     property="ru",
-     *                     type="string",
-     *                     example="Новая Электроника",
-     *                     description="Rus tilida nom (ixtiyoriy)",
-     *                     maxLength=255
-     *                 ),
-     *                 @OA\Property(
-     *                     property="kk",
-     *                     type="string",
-     *                     example="New Electronics",
-     *                     description="Qaraqalpaq tilida nom (ixtiyoriy)",
-     *                     maxLength=255
-     *                 )
-     *             ),
-     *             @OA\Property(
-     *                 property="description",
-     *                 type="object",
-     *                 description="Kategoriya tavsifi (ko'p tilli, ixtiyoriy)",
-     *                 @OA\Property(
-     *                     property="uz",
-     *                     type="string",
-     *                     example="Yangilangan tavsif",
-     *                     description="O'zbek tilida tavsif (ixtiyoriy)",
-     *                     maxLength=1000
-     *                 ),
-     *                 @OA\Property(
-     *                     property="ru",
-     *                     type="string",
-     *                     example="Обновленное описание",
-     *                     description="Rus tilida tavsif (ixtiyoriy)",
-     *                     maxLength=1000
-     *                 ),
-     *                 @OA\Property(
-     *                     property="en",
-     *                     type="string",
-     *                     example="Updated description",
-     *                     description="Ingliz tilida tavsif (ixtiyoriy)",
-     *                     maxLength=1000
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Kategoriya muvaffaqiyatli yangilandi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Category updated successfully"),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="Yangi Elektronika", description="Yangilangan kategoriya nomi"),
-     *                 @OA\Property(property="description", type="string", example="Yangilangan tavsif", description="Yangilangan tavsif"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-12-26T10:30:00Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-12-26T11:45:00Z", description="Yangilangan vaqt")
-     *             ),
-     *             @OA\Property(property="code", type="integer", example=200)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Kategoriya topilmadi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Category not found", description="Berilgan ID bo'yicha kategoriya mavjud emas"),
-     *             @OA\Property(property="data", type="null"),
-     *             @OA\Property(property="code", type="integer", example=404)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validatsiya xatosi - noto'g'ri format yoki qiymatlar",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="The given data was invalid."),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 description="Xatolar ro'yxati",
-     *                 @OA\Property(
-     *                     property="name.uz",
-     *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     example={"The name.uz field must be at least 2 characters."}
-     *                 ),
-     *                 @OA\Property(
-     *                     property="description.kk",
-     *                     type="array",
-     *                     @OA\Items(type="string"),
-     *                     example={"The description.kk field must not exceed 1000 characters."}
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Server xatosi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Failed to update category"),
-     *             @OA\Property(property="data", type="null"),
-     *             @OA\Property(property="code", type="integer", example=500)
-     *         )
-     *     )
+     * path="/api/v1/categories/{id}",
+     * summary="Mavjud kategoriyani yangilash",
+     * tags={"Categories"},
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * required=true,
+     * description="Kategoriya ID raqami",
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * @OA\Property(
+     * property="name",
+     * type="object",
+     * @OA\Property(property="kk", type="string", example="Yangi Patir"),
+     * @OA\Property(property="uz", type="string", example="Yangi Pa'tir"),
+     * @OA\Property(property="ru", type="string", example="Новый патир")
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Kategoriya muvaffaqiyatli yangilandi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Category updated successfully"),
+     * @OA\Property(
+     * property="data",
+     * type="object",
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="name", type="string", example="Yangi Pa'tir"),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * ),
+     * @OA\Property(property="code", type="integer", example=200)
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Kategoriya topilmadi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Category not found"),
+     * @OA\Property(property="code", type="integer", example=404)
+     * )
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Validatsiya xatosi"
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Server xatosi"
+     * )
      * )
      */
     public function update(UpdateCategoryRequest $request, string $id): JsonResponse

@@ -162,17 +162,14 @@
                                         "description": "Kategoriya nomlari (til bo‘yicha)",
                                         "properties": {
                                             "kk": {
-                                                "description": "Qoraqalpoqcha nom",
                                                 "type": "string",
                                                 "example": "Patir"
                                             },
                                             "uz": {
-                                                "description": "O‘zbekcha nom",
                                                 "type": "string",
                                                 "example": "Pa'tir"
                                             },
                                             "ru": {
-                                                "description": "Ruscha nom",
                                                 "type": "string",
                                                 "example": "Патир"
                                             }
@@ -187,10 +184,99 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Kategoriya muvaffaqiyatli yaratildi"
+                        "description": "Kategoriya muvaffaqiyatli yaratildi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Category created successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Pa'tir"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": null
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Validatsiya xatosi"
+                        "description": "Validatsiya xatosi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server xatosi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to create category"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -352,89 +438,37 @@
                     "Categories"
                 ],
                 "summary": "Mavjud kategoriyani yangilash",
-                "description": "ID bo'yicha kategoriya ma'lumotlarini yangilaydi. Barcha maydonlar ixtiyoriy - faqat o'zgartirmoqchi bo'lgan maydonlarni yuboring.",
-                "operationId": "updateCategory",
+                "operationId": "a85a6c8ff85ebcaf43aaecc48fc4f15b",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Kategoriya ID raqami *",
+                        "description": "Kategoriya ID raqami",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64",
-                            "minimum": 1
-                        },
-                        "example": 1
-                    },
-                    {
-                        "name": "Accept-Language",
-                        "in": "header",
-                        "description": "Tizim tilini belgilash uchun",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "default": "uz",
-                            "enum": [
-                                "uz",
-                                "ru",
-                                "kk"
-                            ]
+                            "type": "integer"
                         }
                     }
                 ],
                 "requestBody": {
-                    "description": "Yangilanishi kerak bo'lgan ma'lumotlar (barcha maydonlar ixtiyoriy)",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
                                     "name": {
-                                        "description": "Kategoriya nomi (ko'p tilli, ixtiyoriy)",
                                         "properties": {
-                                            "uz": {
-                                                "description": "O'zbek tilida nom (ixtiyoriy)",
-                                                "type": "string",
-                                                "maxLength": 255,
-                                                "minLength": 2,
-                                                "example": "Yangi Elektronika"
-                                            },
-                                            "ru": {
-                                                "description": "Rus tilida nom (ixtiyoriy)",
-                                                "type": "string",
-                                                "maxLength": 255,
-                                                "example": "Новая Электроника"
-                                            },
                                             "kk": {
-                                                "description": "Qaraqalpaq tilida nom (ixtiyoriy)",
                                                 "type": "string",
-                                                "maxLength": 255,
-                                                "example": "New Electronics"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "description": {
-                                        "description": "Kategoriya tavsifi (ko'p tilli, ixtiyoriy)",
-                                        "properties": {
+                                                "example": "Yangi Patir"
+                                            },
                                             "uz": {
-                                                "description": "O'zbek tilida tavsif (ixtiyoriy)",
                                                 "type": "string",
-                                                "maxLength": 1000,
-                                                "example": "Yangilangan tavsif"
+                                                "example": "Yangi Pa'tir"
                                             },
                                             "ru": {
-                                                "description": "Rus tilida tavsif (ixtiyoriy)",
                                                 "type": "string",
-                                                "maxLength": 1000,
-                                                "example": "Обновленное описание"
-                                            },
-                                            "en": {
-                                                "description": "Ingliz tilida tavsif (ixtiyoriy)",
-                                                "type": "string",
-                                                "maxLength": 1000,
-                                                "example": "Updated description"
+                                                "example": "Новый патир"
                                             }
                                         },
                                         "type": "object"
@@ -467,25 +501,16 @@
                                                     "example": 1
                                                 },
                                                 "name": {
-                                                    "description": "Yangilangan kategoriya nomi",
                                                     "type": "string",
-                                                    "example": "Yangi Elektronika"
-                                                },
-                                                "description": {
-                                                    "description": "Yangilangan tavsif",
-                                                    "type": "string",
-                                                    "example": "Yangilangan tavsif"
+                                                    "example": "Yangi Pa'tir"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-12-26T10:30:00Z"
+                                                    "format": "date-time"
                                                 },
                                                 "updated_at": {
-                                                    "description": "Yangilangan vaqt",
                                                     "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-12-26T11:45:00Z"
+                                                    "format": "date-time"
                                                 }
                                             },
                                             "type": "object"
@@ -511,12 +536,8 @@
                                             "example": false
                                         },
                                         "message": {
-                                            "description": "Berilgan ID bo'yicha kategoriya mavjud emas",
                                             "type": "string",
                                             "example": "Category not found"
-                                        },
-                                        "data": {
-                                            "type": "null"
                                         },
                                         "code": {
                                             "type": "integer",
@@ -529,71 +550,10 @@
                         }
                     },
                     "422": {
-                        "description": "Validatsiya xatosi - noto'g'ri format yoki qiymatlar",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        },
-                                        "errors": {
-                                            "description": "Xatolar ro'yxati",
-                                            "properties": {
-                                                "name.uz": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "example": [
-                                                        "The name.uz field must be at least 2 characters."
-                                                    ]
-                                                },
-                                                "description.kk": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "example": [
-                                                        "The description.kk field must not exceed 1000 characters."
-                                                    ]
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Validatsiya xatosi"
                     },
                     "500": {
-                        "description": "Server xatosi",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Failed to update category"
-                                        },
-                                        "data": {
-                                            "type": "null"
-                                        },
-                                        "code": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Server xatosi"
                     }
                 }
             },
