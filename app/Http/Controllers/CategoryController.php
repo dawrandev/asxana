@@ -177,79 +177,53 @@ class CategoryController extends Controller
     }
 
     /**
-     * ID bo'yicha kategoriyani olish
-     * 
      * @OA\Get(
-     *     path="/api/v1/categories/{id}",
-     *     operationId="getCategoryById",
-     *     tags={"Categories"},
-     *     summary="ID bo'yicha kategoriyani olish",
-     *     description="Berilgan ID raqami bo'yicha kategoriya ma'lumotlarini qaytaradi. Accept-Language header orqali kerakli tilda ma'lumot olishingiz mumkin.",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="Kategoriya ID raqami *",
-     *         required=true,
-     *         example=1,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64",
-     *             minimum=1
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         required=false,
-     *         description="Tizim tilini tanlash (uz, ru, kk)",
-     *         @OA\Schema(
-     *             type="string",
-     *             enum={"uz", "ru", "kk"},
-     *             default="uz"
-     *         ),
-     *         example="uz"
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Kategoriya topildi va muvaffaqiyatli qaytarildi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Category retrieved successfully"),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=1, description="Kategoriya ID raqami"),
-     *                 @OA\Property(property="name", type="string", example="Elektronika", description="Kategoriya nomi (tanlangan tilda)"),
-     *                 @OA\Property(property="description", type="string", example="Barcha elektron qurilmalar", description="Kategoriya tavsifi"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-12-26T10:30:00Z", description="Yaratilgan vaqt"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-12-26T10:30:00Z", description="Yangilangan vaqt")
-     *             ),
-     *             @OA\Property(property="code", type="integer", example=200)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Kategoriya topilmadi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Category not found", description="Berilgan ID bo'yicha kategoriya mavjud emas"),
-     *             @OA\Property(property="data", type="null"),
-     *             @OA\Property(property="code", type="integer", example=404)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Server xatosi",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Failed to retrieve category"),
-     *             @OA\Property(property="data", type="null"),
-     *             @OA\Property(property="code", type="integer", example=500)
-     *         )
-     *     )
+     * path="/api/v1/categories/{id}",
+     * summary="ID bo'yicha kategoriyani olish (Barcha tillarda)",
+     * description="Berilgan ID bo'yicha kategoriya ma'lumotlarini barcha tillardagi nomlari bilan qaytaradi.",
+     * tags={"Categories"},
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="Kategoriya ID raqami",
+     * required=true,
+     * example=1,
+     * @OA\Schema(type="integer")
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Muvaffaqiyatli operatsiya",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Category retrieved successfully"),
+     * @OA\Property(
+     * property="data",
+     * type="object",
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(
+     * property="name",
+     * type="object",
+     * description="Kategoriya nomlari obyekt ko'rinishida",
+     * @OA\Property(property="uz", type="string", example="Salatlar"),
+     * @OA\Property(property="ru", type="string", example="Салаты"),
+     * @OA\Property(property="kk", type="string", example="Salatlar")
+     * ),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * ),
+     * @OA\Property(property="code", type="integer", example=200)
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Kategoriya topilmadi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Category not found"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=404)
+     * )
+     * )
      * )
      */
     public function show(int $id): JsonResponse

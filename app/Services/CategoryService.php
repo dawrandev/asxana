@@ -35,7 +35,7 @@ class CategoryService
 
     public function getCategoryById(int $id): ?Category
     {
-        return Category::find($id);
+        return Category::with('translations')->find($id);
     }
 
     public function updateCategory(Category $category, array $data): Category

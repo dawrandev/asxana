@@ -41,7 +41,6 @@ class StoreProductRequest extends FormRequest
             'description.ru' => ['nullable', 'string'],
         ];
 
-        // Endi [] operatori xato bermaydi, chunki qiymat massiv
         foreach ($this->input('name', []) as $lang => $value) {
             if (in_array($lang, ['kk', 'uz', 'ru'])) {
                 $rules["name.$lang"][] = new UniqueProductTranslation($lang);

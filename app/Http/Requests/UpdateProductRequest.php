@@ -17,7 +17,6 @@ class UpdateProductRequest extends FormRequest
 
     public function rules(): array
     {
-        // route('id') orqali ID ni olish ishonchliroq
         $productId = $this->route('id');
 
         $rules = [
@@ -26,19 +25,15 @@ class UpdateProductRequest extends FormRequest
             'price'          => ['sometimes', 'integer', 'min:0'],
             'is_available'   => ['sometimes', 'boolean'],
             'name'           => ['required', 'array', 'min:1'],
-
-            // Qoidalarni massiv ko'rinishida yozamiz
             'name.kk'        => ['required', 'string', 'max:255'],
             'name.uz'        => ['required', 'string', 'max:255'],
             'name.ru'        => ['required', 'string', 'max:255'],
-
             'description'    => ['nullable', 'array'],
             'description.kk' => ['nullable', 'string'],
             'description.uz' => ['nullable', 'string'],
             'description.ru' => ['nullable', 'string'],
         ];
 
-        // Unikalikni tekshirish (joriy mahsulot ID sini istisno qilgan holda)
         foreach ($this->input('name', []) as $lang => $value) {
             if (in_array($lang, ['kk', 'uz', 'ru']) && $value) {
                 $rules["name.$lang"][] = new UniqueProductTranslation($lang, $productId);
@@ -46,21 +41,6 @@ class UpdateProductRequest extends FormRequest
         }
 
         return $rules;
-    }
-
-    protected function prepareForValidation(): void
-    {
-        // Agar name yoki description string (JSON) bo'lib kelsa, massivga aylantiramiz
-        // form-data orqali name[uz] ko'rinishida yuborilsa, bu qism kerak bo'lmaydi, 
-        // lekin ehtiyot shart qoldiramiz.
-        foreach (['name', 'description'] as $field) {
-            if (is_string($this->input($field))) {
-                $decoded = json_decode($this->input($field), true);
-                if (json_last_error() === JSON_ERROR_NONE) {
-                    $this->merge([$field => $decoded]);
-                }
-            }
-        }
     }
 
     public function messages(): array
@@ -87,10 +67,5 @@ class UpdateProductRequest extends FormRequest
                 'errors' => $validator->errors()
             ], 422)
         );
-    }
-
-    public function passedValidation()
-    {
-        // No-op after validation
     }
 }

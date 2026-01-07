@@ -286,42 +286,24 @@
                 "tags": [
                     "Categories"
                 ],
-                "summary": "ID bo'yicha kategoriyani olish",
-                "description": "Berilgan ID raqami bo'yicha kategoriya ma'lumotlarini qaytaradi. Accept-Language header orqali kerakli tilda ma'lumot olishingiz mumkin.",
-                "operationId": "getCategoryById",
+                "summary": "ID bo'yicha kategoriyani olish (Barcha tillarda)",
+                "description": "Berilgan ID bo'yicha kategoriya ma'lumotlarini barcha tillardagi nomlari bilan qaytaradi.",
+                "operationId": "d809927cce155b8469de92d4c76f9288",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Kategoriya ID raqami *",
+                        "description": "Kategoriya ID raqami",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64",
-                            "minimum": 1
+                            "type": "integer"
                         },
                         "example": 1
-                    },
-                    {
-                        "name": "Accept-Language",
-                        "in": "header",
-                        "description": "Tizim tilini tanlash (uz, ru, kk)",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "default": "uz",
-                            "enum": [
-                                "uz",
-                                "ru",
-                                "kk"
-                            ]
-                        },
-                        "example": "uz"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Kategoriya topildi va muvaffaqiyatli qaytarildi",
+                        "description": "Muvaffaqiyatli operatsiya",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -337,31 +319,34 @@
                                         "data": {
                                             "properties": {
                                                 "id": {
-                                                    "description": "Kategoriya ID raqami",
                                                     "type": "integer",
                                                     "example": 1
                                                 },
                                                 "name": {
-                                                    "description": "Kategoriya nomi (tanlangan tilda)",
-                                                    "type": "string",
-                                                    "example": "Elektronika"
-                                                },
-                                                "description": {
-                                                    "description": "Kategoriya tavsifi",
-                                                    "type": "string",
-                                                    "example": "Barcha elektron qurilmalar"
+                                                    "description": "Kategoriya nomlari obyekt ko'rinishida",
+                                                    "properties": {
+                                                        "uz": {
+                                                            "type": "string",
+                                                            "example": "Salatlar"
+                                                        },
+                                                        "ru": {
+                                                            "type": "string",
+                                                            "example": "Салаты"
+                                                        },
+                                                        "kk": {
+                                                            "type": "string",
+                                                            "example": "Salatlar"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 },
                                                 "created_at": {
-                                                    "description": "Yaratilgan vaqt",
                                                     "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-12-26T10:30:00Z"
+                                                    "format": "date-time"
                                                 },
                                                 "updated_at": {
-                                                    "description": "Yangilangan vaqt",
                                                     "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-12-26T10:30:00Z"
+                                                    "format": "date-time"
                                                 }
                                             },
                                             "type": "object"
@@ -387,7 +372,6 @@
                                             "example": false
                                         },
                                         "message": {
-                                            "description": "Berilgan ID bo'yicha kategoriya mavjud emas",
                                             "type": "string",
                                             "example": "Category not found"
                                         },
@@ -397,33 +381,6 @@
                                         "code": {
                                             "type": "integer",
                                             "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server xatosi",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Failed to retrieve category"
-                                        },
-                                        "data": {
-                                            "type": "null"
-                                        },
-                                        "code": {
-                                            "type": "integer",
-                                            "example": 500
                                         }
                                     },
                                     "type": "object"
