@@ -24,25 +24,31 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'category_id' => 'required|integer|exists:categories,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|integer|min:0',
             'is_available' => 'sometimes|boolean',
 
-            'translations' => 'required|array|min:1',
-            'translations.*.lang_code' => 'required|string|in:kk,uz,ru',
-            'translations.*.name' => 'required|string|max:255',
-            'translations.*.description' => 'nullable|string',
+            'name' => 'required|array|min:1',
+            'name.kk' => ['required', 'string', 'max:255'],
+            'name.uz' => ['required', 'string', 'max:255'],
+            'name.ru' => ['required', 'string', 'max:255'],
+
+            'description' => 'nullable|array',
+            'description.kk' => ['nullable', 'string'],
+            'description.uz' => ['nullable', 'string'],
+            'description.ru' => ['nullable', 'string'],
         ];
 
-        foreach ($this->input('translations', []) as $index => $translation) {
-            if (isset($translation['lang_code'])) {
-                $rules["translations.{$index}.name"][] = new UniqueProductTranslation(
-                    $translation['lang_code']
-                );
+        // Endi [] operatori xato bermaydi, chunki qiymat massiv
+        foreach ($this->input('name', []) as $lang => $value) {
+            if (in_array($lang, ['kk', 'uz', 'ru'])) {
+                $rules["name.$lang"][] = new UniqueProductTranslation($lang);
             }
         }
+
+        return $rules;
     }
 
     public function messages(): array
@@ -52,10 +58,10 @@ class StoreProductRequest extends FormRequest
             'category_id.exists' => 'Tanlangan kategoriya mavjud emas',
             'image.required' => 'Mahsulot rasmi yuklanishi shart',
             'price.required' => 'Mahsulot narxi kiritilishi shart',
-            'translations.required' => 'Kamida bitta tilda maʼlumot boʻlishi shart',
-            'translations.*.lang_code.in' => 'Til kodi notoʻgʻri (kk, uz, ru boʻlishi kerak)',
-            'translations.*.name.required' => 'Mahsulot nomi kiritilishi shart',
-            'translations.*.description.required' => 'Mahsulot tavsifi kiritilishi shart',
+            'name.required' => 'Kamida bitta tilda maʼlumot boʻlishi shart',
+            'name.*.required' => 'Mahsulot nomi kiritilishi shart',
+            'name.*.max' => 'Mahsulot nomi 255 belgidan ko‘p bo‘lishi mumkin emas',
+            'description.*.string' => 'Tavsif matn formatida bo‘lishi kerak',
         ];
     }
 

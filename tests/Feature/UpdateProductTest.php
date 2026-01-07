@@ -30,10 +30,15 @@ class UpdateProductTest extends TestCase
         $payload = [
             '_method' => 'PUT',
             'price' => 150,
-            'translations' => [
-                ['lang_code' => 'kk', 'name' => 'old1', 'description' => 'desc2'],
-                ['lang_code' => 'uz', 'name' => 'old2', 'description' => 'desc2'],
-                ['lang_code' => 'ru', 'name' => 'old3', 'description' => 'desc2'],
+            'name' => [
+                'kk' => 'old1',
+                'uz' => 'old2',
+                'ru' => 'old3',
+            ],
+            'description' => [
+                'kk' => 'desc2',
+                'uz' => 'desc2',
+                'ru' => 'desc2',
             ],
             'image' => UploadedFile::fake()->image('new.jpg'),
         ];

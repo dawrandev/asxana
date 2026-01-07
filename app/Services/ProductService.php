@@ -28,7 +28,19 @@ class ProductService
                 'is_available' => $data['is_available'] ?? true,
             ];
 
-            $translations = $data['translations'];
+            $names = $data['name'] ?? [];
+            $descriptions = $data['description'] ?? [];
+
+            $translations = collect($names)
+                ->map(function ($name, $lang) use ($descriptions) {
+                    return [
+                        'lang_code' => $lang,
+                        'name' => $name,
+                        'description' => $descriptions[$lang] ?? null,
+                    ];
+                })
+                ->values()
+                ->toArray();
 
             return $this->productRepository->store($productData, $translations);
         } catch (\Exception $e) {
@@ -46,17 +58,26 @@ class ProductService
                 'is_available' => $data['is_available'] ?? $product->is_available,
             ];
 
-            // Agar yangi rasm yuklangan bo'lsa
             if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
-                // Eski rasmni o'chirish
                 if ($product->image) {
                     Storage::disk('public')->delete($product->image);
                 }
-                // Yangi rasmni saqlash
                 $productData['image'] = $data['image']->store('products', 'public');
             }
 
-            $translations = $data['translations'] ?? [];
+            $names = $data['name'] ?? [];
+            $descriptions = $data['description'] ?? [];
+
+            $translations = collect($names)
+                ->map(function ($name, $lang) use ($descriptions) {
+                    return [
+                        'lang_code' => $lang,
+                        'name' => $name,
+                        'description' => $descriptions[$lang] ?? null,
+                    ];
+                })
+                ->values()
+                ->toArray();
 
             return $this->productRepository->update($product, $productData, $translations);
         } catch (\Exception $e) {

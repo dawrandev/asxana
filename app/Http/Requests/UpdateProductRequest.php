@@ -15,67 +15,59 @@ class UpdateProductRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $productId = $this->route('id') !== null ? (int) $this->route('id') : null;
-
-        $this->merge([
-            'product_id' => $productId,
-        ]);
-
-        if (is_string($this->input('translations'))) {
-            $decoded = json_decode($this->input('translations'), true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $this->merge(['translations' => $decoded]);
-            } else {
-                Log::error('JSON decode error:', ['error' => json_last_error_msg()]);
-            }
-        }
-    }
-
     public function rules(): array
     {
-        $productId = $this->input('product_id');
+        // route('id') orqali ID ni olish ishonchliroq
+        $productId = $this->route('id');
 
         $rules = [
-            'category_id'  => 'sometimes|exists:categories,id',
-            'image'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'price'        => 'sometimes|integer|min:0',
-            'is_available' => 'sometimes|boolean',
-            'translations' => 'required|array|min:1',
-            'translations.*.lang_code' => 'required|string|in:kk,uz,ru',
-            'translations.*.name' => 'required|string|max:255',
-            'translations.*.description' => 'required|string',
+            'category_id'    => ['sometimes', 'exists:categories,id'],
+            'image'          => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'price'          => ['sometimes', 'integer', 'min:0'],
+            'is_available'   => ['sometimes', 'boolean'],
+            'name'           => ['required', 'array', 'min:1'],
+
+            // Qoidalarni massiv ko'rinishida yozamiz
+            'name.kk'        => ['required', 'string', 'max:255'],
+            'name.uz'        => ['required', 'string', 'max:255'],
+            'name.ru'        => ['required', 'string', 'max:255'],
+
+            'description'    => ['nullable', 'array'],
+            'description.kk' => ['nullable', 'string'],
+            'description.uz' => ['nullable', 'string'],
+            'description.ru' => ['nullable', 'string'],
         ];
 
-        $langCodes = [];
-        foreach ($this->input('translations', []) as $index => $translation) {
-            if (isset($translation['lang_code']) && isset($translation['name'])) {
-                $langCode = $translation['lang_code'];
-                $name = $translation['name'];
-
-                if (in_array($langCode, $langCodes)) {
-                    continue;
-                }
-                $langCodes[] = $langCode;
-
-                $rules["translations.{$index}.name"][] = new UniqueProductTranslation(
-                    $langCode,
-                    $productId
-                );
+        // Unikalikni tekshirish (joriy mahsulot ID sini istisno qilgan holda)
+        foreach ($this->input('name', []) as $lang => $value) {
+            if (in_array($lang, ['kk', 'uz', 'ru']) && $value) {
+                $rules["name.$lang"][] = new UniqueProductTranslation($lang, $productId);
             }
         }
 
         return $rules;
     }
 
+    protected function prepareForValidation(): void
+    {
+        // Agar name yoki description string (JSON) bo'lib kelsa, massivga aylantiramiz
+        // form-data orqali name[uz] ko'rinishida yuborilsa, bu qism kerak bo'lmaydi, 
+        // lekin ehtiyot shart qoldiramiz.
+        foreach (['name', 'description'] as $field) {
+            if (is_string($this->input($field))) {
+                $decoded = json_decode($this->input($field), true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $this->merge([$field => $decoded]);
+                }
+            }
+        }
+    }
+
     public function messages(): array
     {
         return [
-            'translations.*.name.required' => 'Mahsulot nomi kiritilishi shart',
-            'translations.*.lang_code.required' => 'Til kodi kiritilishi shart',
-            'translations.*.lang_code.in' => 'Til kodi kk, uz yoki ru bo\'lishi kerak',
-            'translations.*.description.required' => 'Mahsulot tavsifi kiritilishi shart',
+            'name.*.required' => 'Mahsulot nomi kiritilishi shart',
+            'name.*.max' => 'Mahsulot nomi 255 belgidan ko‘p bo‘lishi mumkin emas',
             'image.image' => 'Yuklangan fayl rasm bo\'lishi kerak',
             'image.mimes' => 'Rasm jpeg, png yoki jpg formatida bo\'lishi kerak',
         ];

@@ -186,19 +186,26 @@ class ProductController extends Controller
      * @OA\MediaType(
      * mediaType="multipart/form-data",
      * @OA\Schema(
-     * required={"category_id", "price", "image", "translations"},
+     * required={"category_id", "price", "image", "name"},
      * @OA\Property(property="category_id", type="integer", example=1, description="Kategoriya ID raqami"),
      * @OA\Property(property="price", type="integer", example=25000, description="Mahsulot narxi"),
      * @OA\Property(property="is_available", type="boolean", example=true, description="Sotuvda bor yoki yo'qligi"),
      * @OA\Property(property="image", type="string", format="binary", description="Mahsulot rasmi (fayl)"),
      * @OA\Property(
-     * property="translations",
-     * type="array",
-     * description="Turli tillardagi nom va tavsiflar",
-     * @OA\Items(
-     * @OA\Property(property="lang_code", type="string", example="uz", description="Til kodi (uz, ru, kk)"),
-     * @OA\Property(property="name", type="string", example="Sezar salat", description="Mahsulot nomi"),
-     * @OA\Property(property="description", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi")
+     * property="name",
+     * type="object",
+     * description="Mahsulot nomlari (til bo‘yicha)",
+     * @OA\Property(property="kk", type="string", example="Sezar salat", description="Mahsulot nomi (kk)"),
+     * @OA\Property(property="uz", type="string", example="Sezar salat", description="Mahsulot nomi (uz)"),
+     * @OA\Property(property="ru", type="string", example="Сезар салат", description="Mahsulot nomi (ru)"),
+     * )
+     * @OA\Property(
+     * property="description",
+     * type="object",
+     * description="Mahsulot tavsiflari (til bo‘yicha)",
+     * @OA\Property(property="kk", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi (kk)"),
+     * @OA\Property(property="uz", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi (uz)"),
+     * @OA\Property(property="ru", type="string", example="Классический с курицей и пармезаном", description="Mahsulot tavsifi (ru)"),
      * )
      * )
      * )
@@ -271,13 +278,18 @@ class ProductController extends Controller
      * @OA\Property(property="is_available", type="boolean", example=true),
      * @OA\Property(property="image", type="string", format="binary"),
      * @OA\Property(
-     * property="translations",
-     * type="array",
-     * @OA\Items(
-     * @OA\Property(property="lang_code", type="string", example="uz"),
-     * @OA\Property(property="name", type="string", example="Yangi nom"),
-     * @OA\Property(property="description", type="string", example="Yangi tavsif")
+     * property="name",
+     * type="object",
+     * @OA\Property(property="kk", type="string", example="Yangi nom"),
+     * @OA\Property(property="uz", type="string", example="Yangi nom"),
+     * @OA\Property(property="ru", type="string", example="Новый название"),
      * )
+     * @OA\Property(
+     * property="description",
+     * type="object",
+     * @OA\Property(property="kk", type="string", example="Yangi tavsif"),
+     * @OA\Property(property="uz", type="string", example="Yangi tavsif"),
+     * @OA\Property(property="ru", type="string", example="Новые описание"),
      * )
      * )
      * )
