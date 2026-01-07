@@ -177,69 +177,69 @@ class ProductController extends Controller
 
     /**
      * @OA\Post(
-     * path="/api/v1/products",
-     * summary="Yangi mahsulot yaratish",
-     * description="Mahsulot asosiy ma'lumotlari va bir nechta tildagi tarjimalarini rasm bilan birga saqlaydi.",
-     * tags={"Products"},
-     * @OA\RequestBody(
-     * required=true,
-     * @OA\MediaType(
-     * mediaType="multipart/form-data",
-     * @OA\Schema(
-     * required={"category_id", "price", "image", "name"},
-     * @OA\Property(property="category_id", type="integer", example=1, description="Kategoriya ID raqami"),
-     * @OA\Property(property="price", type="integer", example=25000, description="Mahsulot narxi"),
-     * @OA\Property(property="is_available", type="boolean", example=true, description="Sotuvda bor yoki yo'qligi"),
-     * @OA\Property(property="image", type="string", format="binary", description="Mahsulot rasmi (fayl)"),
-     * @OA\Property(
-     * property="name",
-     * type="object",
-     * description="Mahsulot nomlari (til bo‘yicha)",
-     * @OA\Property(property="kk", type="string", example="Sezar salat", description="Mahsulot nomi (kk)"),
-     * @OA\Property(property="uz", type="string", example="Sezar salat", description="Mahsulot nomi (uz)"),
-     * @OA\Property(property="ru", type="string", example="Сезар салат", description="Mahsulot nomi (ru)"),
-     * )
-     * @OA\Property(
-     * property="description",
-     * type="object",
-     * description="Mahsulot tavsiflari (til bo‘yicha)",
-     * @OA\Property(property="kk", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi (kk)"),
-     * @OA\Property(property="uz", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi (uz)"),
-     * @OA\Property(property="ru", type="string", example="Классический с курицей и пармезаном", description="Mahsulot tavsifi (ru)"),
-     * )
-     * )
-     * )
-     * )
-     * ),
-     * @OA\Response(
-     * response=201,
-     * description="Mahsulot muvaffaqiyatli yaratildi",
-     * @OA\JsonContent(
-     * @OA\Property(property="success", type="boolean", example=true),
-     * @OA\Property(property="message", type="string", example="Product created successfully"),
-     * @OA\Property(property="data", type="object", ref="#/components/schemas/ProductResource"),
-     * @OA\Property(property="code", type="integer", example=201)
-     * )
-     * ),
-     * @OA\Response(
-     * response=422,
-     * description="Validatsiya xatosi (masalan: rasm formati noto'g'ri yoki nom band)",
-     * @OA\JsonContent(
-     * @OA\Property(property="success", type="boolean", example=false),
-     * @OA\Property(property="message", type="string", example="Validation error"),
-     * @OA\Property(property="errors", type="object")
-     * )
-     * ),
-     * @OA\Response(
-     * response=500,
-     * description="Serverda xatolik yuz berdi",
-     * @OA\JsonContent(
-     * @OA\Property(property="success", type="boolean", example=false),
-     * @OA\Property(property="message", type="string", example="Failed to create product")
-     * )
-     * )
+     *     path="/api/v1/products",
+     *     summary="Yangi mahsulot yaratish",
+     *     description="Mahsulot asosiy ma'lumotlari va bir nechta tildagi tarjimalarini rasm bilan birga saqlaydi.",
+     *     tags={"Products"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"category_id", "price", "image", "name"},
+     *                 @OA\Property(property="category_id", type="integer", example=1, description="Kategoriya ID raqami"),
+     *                 @OA\Property(property="price", type="integer", example=25000, description="Mahsulot narxi"),
+     *                 @OA\Property(property="is_available", type="boolean", example=true, description="Sotuvda bor yoki yo'qligi"),
+     *                 @OA\Property(property="image", type="string", format="binary", description="Mahsulot rasmi (fayl)"),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="object",
+     *                     description="Mahsulot nomlari (til bo‘yicha)",
+     *                     @OA\Property(property="kk", type="string", example="Sezar salat", description="Mahsulot nomi (kk)"),
+     *                     @OA\Property(property="uz", type="string", example="Sezar salat", description="Mahsulot nomi (uz)"),
+     *                     @OA\Property(property="ru", type="string", example="Сезар салат", description="Mahsulot nomi (ru)")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     type="object",
+     *                     description="Mahsulot tavsiflari (til bo‘yicha)",
+     *                     @OA\Property(property="kk", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi (kk)"),
+     *                     @OA\Property(property="uz", type="string", example="Tovuq go'shti va parmezan bilan", description="Mahsulot tavsifi (uz)"),
+     *                     @OA\Property(property="ru", type="string", example="Классический с курицей и пармезаном", description="Mahsulot tavsifi (ru)")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Mahsulot muvaffaqiyatli yaratildi",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Product created successfully"),
+     *             @OA\Property(property="data", type="object", ref="#/components/schemas/ProductResource"),
+     *             @OA\Property(property="code", type="integer", example=201)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validatsiya xatosi (masalan: rasm formati noto'g'ri yoki nom band)",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Validation error"),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Serverda xatolik yuz berdi",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Failed to create product")
+     *         )
+     *     )
      * )
      */
+
 
     public function store(StoreProductRequest $request): JsonResponse
     {
@@ -283,14 +283,14 @@ class ProductController extends Controller
      * @OA\Property(property="kk", type="string", example="Yangi nom"),
      * @OA\Property(property="uz", type="string", example="Yangi nom"),
      * @OA\Property(property="ru", type="string", example="Новый название"),
-     * )
+     * ),
      * @OA\Property(
      * property="description",
      * type="object",
      * @OA\Property(property="kk", type="string", example="Yangi tavsif"),
      * @OA\Property(property="uz", type="string", example="Yangi tavsif"),
      * @OA\Property(property="ru", type="string", example="Новые описание"),
-     * )
+     * ),
      * )
      * )
      * ),

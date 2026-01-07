@@ -829,7 +829,7 @@
                                     "category_id",
                                     "price",
                                     "image",
-                                    "translations"
+                                    "name"
                                 ],
                                 "properties": {
                                     "category_id": {
@@ -852,29 +852,47 @@
                                         "type": "string",
                                         "format": "binary"
                                     },
-                                    "translations": {
-                                        "description": "Turli tillardagi nom va tavsiflar",
-                                        "type": "array",
-                                        "items": {
-                                            "properties": {
-                                                "lang_code": {
-                                                    "description": "Til kodi (uz, ru, kk)",
-                                                    "type": "string",
-                                                    "example": "uz"
-                                                },
-                                                "name": {
-                                                    "description": "Mahsulot nomi",
-                                                    "type": "string",
-                                                    "example": "Sezar salat"
-                                                },
-                                                "description": {
-                                                    "description": "Mahsulot tavsifi",
-                                                    "type": "string",
-                                                    "example": "Tovuq go'shti va parmezan bilan"
-                                                }
+                                    "name": {
+                                        "description": "Mahsulot nomlari (til bo‘yicha)",
+                                        "properties": {
+                                            "kk": {
+                                                "description": "Mahsulot nomi (kk)",
+                                                "type": "string",
+                                                "example": "Sezar salat"
                                             },
-                                            "type": "object"
-                                        }
+                                            "uz": {
+                                                "description": "Mahsulot nomi (uz)",
+                                                "type": "string",
+                                                "example": "Sezar salat"
+                                            },
+                                            "ru": {
+                                                "description": "Mahsulot nomi (ru)",
+                                                "type": "string",
+                                                "example": "Сезар салат"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "description": {
+                                        "description": "Mahsulot tavsiflari (til bo‘yicha)",
+                                        "properties": {
+                                            "kk": {
+                                                "description": "Mahsulot tavsifi (kk)",
+                                                "type": "string",
+                                                "example": "Tovuq go'shti va parmezan bilan"
+                                            },
+                                            "uz": {
+                                                "description": "Mahsulot tavsifi (uz)",
+                                                "type": "string",
+                                                "example": "Tovuq go'shti va parmezan bilan"
+                                            },
+                                            "ru": {
+                                                "description": "Mahsulot tavsifi (ru)",
+                                                "type": "string",
+                                                "example": "Классический с курицей и пармезаном"
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 },
                                 "type": "object"
@@ -1154,25 +1172,39 @@
                                         "type": "string",
                                         "format": "binary"
                                     },
-                                    "translations": {
-                                        "type": "array",
-                                        "items": {
-                                            "properties": {
-                                                "lang_code": {
-                                                    "type": "string",
-                                                    "example": "uz"
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Yangi nom"
-                                                },
-                                                "description": {
-                                                    "type": "string",
-                                                    "example": "Yangi tavsif"
-                                                }
+                                    "name": {
+                                        "properties": {
+                                            "kk": {
+                                                "type": "string",
+                                                "example": "Yangi nom"
                                             },
-                                            "type": "object"
-                                        }
+                                            "uz": {
+                                                "type": "string",
+                                                "example": "Yangi nom"
+                                            },
+                                            "ru": {
+                                                "type": "string",
+                                                "example": "Новый название"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "description": {
+                                        "properties": {
+                                            "kk": {
+                                                "type": "string",
+                                                "example": "Yangi tavsif"
+                                            },
+                                            "uz": {
+                                                "type": "string",
+                                                "example": "Yangi tavsif"
+                                            },
+                                            "ru": {
+                                                "type": "string",
+                                                "example": "Новые описание"
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 },
                                 "type": "object"
