@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,10 +21,6 @@ class AppServiceProvider extends ServiceProvider
     {
         if (!defined('L5_SWAGGER_CONST_HOST')) {
             define('L5_SWAGGER_CONST_HOST', env('L5_SWAGGER_CONST_HOST', config('app.url', 'http://localhost')));
-        }
-
-        if (app()->environment('production') || config('app.env') === 'production') {
-            URL::forceScheme('https');
         }
     }
 }
