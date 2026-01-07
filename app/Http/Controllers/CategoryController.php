@@ -109,32 +109,51 @@ class CategoryController extends Controller
 
     /**
      * @OA\Post(
-     * path="/api/v1/categories",
-     * summary="Yangi kategoriya qo'shish",
-     * tags={"Categories"},
-     * @OA\RequestBody(
-     * required=true,
-     * @OA\JsonContent(
-     * required={"translations"},
-     * @OA\Property(
-     * property="translations",
-     * type="array",
-     * description="Kategoriya nomlarining tarjimalari",
-     * @OA\Items(
-     * type="object",
-     * required={"lang_code", "name"},
-     * @OA\Property(property="lang_code", type="string", example="uz", description="Til kodi (uz, ru, kk)"),
-     * @OA\Property(property="name", type="string", example="Gamburger", description="Kategoriya nomi")
-     * )
-     * )
-     * )
-     * ),
-     * @OA\Response(
-     * response=201,
-     * description="Muvaffaqiyatli yaratildi"
-     * )
+     *     path="/api/v1/categories",
+     *     summary="Yangi kategoriya qo'shish",
+     *     tags={"Categories"},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="object",
+     *                 description="Kategoriya nomlari (til bo‘yicha)",
+     *                 @OA\Property(
+     *                     property="kk",
+     *                     type="string",
+     *                     example="Patir",
+     *                     description="Qoraqalpoqcha nom"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="uz",
+     *                     type="string",
+     *                     example="Pa'tir",
+     *                     description="O‘zbekcha nom"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ru",
+     *                     type="string",
+     *                     example="Патир",
+     *                     description="Ruscha nom"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=201,
+     *         description="Kategoriya muvaffaqiyatli yaratildi"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validatsiya xatosi"
+     *     )
      * )
      */
+
     public function store(StoreCategoryRequest $request): JsonResponse
     {
         try {

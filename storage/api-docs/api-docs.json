@@ -155,31 +155,29 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "translations"
+                                    "name"
                                 ],
                                 "properties": {
-                                    "translations": {
-                                        "description": "Kategoriya nomlarining tarjimalari",
-                                        "type": "array",
-                                        "items": {
-                                            "required": [
-                                                "lang_code",
-                                                "name"
-                                            ],
-                                            "properties": {
-                                                "lang_code": {
-                                                    "description": "Til kodi (uz, ru, kk)",
-                                                    "type": "string",
-                                                    "example": "uz"
-                                                },
-                                                "name": {
-                                                    "description": "Kategoriya nomi",
-                                                    "type": "string",
-                                                    "example": "Gamburger"
-                                                }
+                                    "name": {
+                                        "description": "Kategoriya nomlari (til bo‘yicha)",
+                                        "properties": {
+                                            "kk": {
+                                                "description": "Qoraqalpoqcha nom",
+                                                "type": "string",
+                                                "example": "Patir"
                                             },
-                                            "type": "object"
-                                        }
+                                            "uz": {
+                                                "description": "O‘zbekcha nom",
+                                                "type": "string",
+                                                "example": "Pa'tir"
+                                            },
+                                            "ru": {
+                                                "description": "Ruscha nom",
+                                                "type": "string",
+                                                "example": "Патир"
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 },
                                 "type": "object"
@@ -189,7 +187,10 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Muvaffaqiyatli yaratildi"
+                        "description": "Kategoriya muvaffaqiyatli yaratildi"
+                    },
+                    "422": {
+                        "description": "Validatsiya xatosi"
                     }
                 }
             }

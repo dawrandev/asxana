@@ -18,17 +18,6 @@ class UpdateCategoryRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $translations = $this->input('translations', null);
-        if (is_string($translations)) {
-            $decoded = json_decode($translations, true);
-            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                $this->merge(['translations' => $decoded]);
-            }
-        }
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -39,33 +28,34 @@ class UpdateCategoryRequest extends FormRequest
         $categoryId = $this->route('id');
 
         $rules = [
-            'translations' => 'required|array|min:1',
-            'translations.*.lang_code' => 'required|string|in:kk,uz,ru',
-            'translations.*.name' => 'required|string|max:255',
+            'name' => 'required|array|min:1',
+            'name.kk' => ['required', 'string', 'max:255'],
+            'name.uz' => ['required', 'string', 'max:255'],
+            'name.ru' => ['required', 'string', 'max:255'],
         ];
 
-        foreach ($this->input('translations', []) as $index => $translation) {
-            if (isset($translation['lang_code'])) {
-                // Append the unique translation rule to the per-index name rule
-                $rules["translations.{$index}.name"][] = new UniqueCategoryTranslation($translation['lang_code'], $categoryId);
+        foreach ($this->input('name', []) as $lang => $value) {
+            if (in_array($lang, ['kk', 'uz', 'ru'])) {
+                $rules["name.$lang"][] =
+                    new UniqueCategoryTranslation($lang, $categoryId);
             }
         }
 
         return $rules;
     }
 
+
     public function messages(): array
     {
         return [
-            'translations.required' => 'Translations are required',
-            'translations.array' => 'Translations must be an array',
-            'translations.min' => 'At least one translation is required',
-            'translations.*.lang_code.required' => 'Language code is required',
-            'translations.*.lang_code.in' => 'Language code must be kk, uz, or ru',
-            'translations.*.name.required' => 'Category name is required',
-            'translations.*.name.max' => 'Category name cannot exceed 255 characters',
+            'name.required' => 'Category name is required',
+            'name.array' => 'Name must be an object',
+            'name.min' => 'At least one language is required',
+            'name.*.required' => 'Category name is required',
+            'name.*.max' => 'Category name cannot exceed 255 characters',
         ];
     }
+
 
     protected function failedValidation(Validator $validator)
     {

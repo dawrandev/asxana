@@ -16,18 +16,22 @@ class CategoryService
         return DB::transaction(function () use ($data) {
             $category = Category::create();
 
-            $translations = collect($data['translations'])->map(function ($item) {
-                return [
-                    'lang_code' => $item['lang_code'],
-                    'name' => $item['name']
-                ];
-            })->toArray();
+            $names = collect($data['name'])
+                ->map(function ($name, $lang) {
+                    return [
+                        'lang_code' => $lang,
+                        'name' => $name,
+                    ];
+                })
+                ->values()
+                ->toArray();
 
-            $category->translations()->createMany($translations);
+            $category->translations()->createMany($names);
 
             return $category->load('translations');
         });
     }
+
 
     public function getCategoryById(int $id): ?Category
     {
@@ -38,14 +42,20 @@ class CategoryService
     {
         try {
             DB::transaction(function () use ($category, $data) {
+
                 $category->translations()->delete();
 
-                foreach ($data['translations'] as $translation) {
-                    $category->translations()->create([
-                        'lang_code' => $translation['lang_code'],
-                        'name' => $translation['name']
-                    ]);
-                }
+                $translations = collect($data['name'])
+                    ->map(function ($name, $lang) {
+                        return [
+                            'lang_code' => $lang,
+                            'name' => $name,
+                        ];
+                    })
+                    ->values()
+                    ->toArray();
+
+                $category->translations()->createMany($translations);
             });
 
             $category->touch();
@@ -56,6 +66,7 @@ class CategoryService
             throw $e;
         }
     }
+
 
     public function deleteCategory(Category $category): bool
     {

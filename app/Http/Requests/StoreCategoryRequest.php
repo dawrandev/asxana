@@ -25,21 +25,22 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'translations' => 'required|array|min:1',
-            'translations.*.lang_code' => 'required|string|in:kk,uz,ru',
-            'translations.*.name' => 'required|string|max:255',
+            'name' => 'required|array|min:1',
+            'name.kk' => ['required', 'string', 'max:255'],
+            'name.uz' => ['required', 'string', 'max:255'],
+            'name.ru' => ['required', 'string', 'max:255'],
         ];
 
-        foreach ($this->input('translations', []) as $index => $translation) {
-            if (isset($translation['lang_code'])) {
-                $rules["translations.{$index}.name"][] = new UniqueCategoryTranslation(
-                    $translation['lang_code']
-                );
+        foreach ($this->input('name', []) as $lang => $value) {
+            if (in_array($lang, ['kk', 'uz', 'ru'])) {
+                $rules["name.$lang"][] =
+                    new UniqueCategoryTranslation($lang);
             }
         }
 
         return $rules;
     }
+
 
     public function messages()
     {
