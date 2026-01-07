@@ -1,25 +1,16 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
-    */
-
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // '*' o'rniga aniq frontend manzillarini kiriting
+    'allowed_origins' => [
+        'http://localhost:3000',      // Local React/Next.js uchun
+        'http://localhost:5173',      // Vite/Vue uchun
+        'https://food-app-ruby-ten.vercel.app' // Sizning Vercel manzilingiz
+    ],
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +20,5 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => true,
-
+    'supports_credentials' => true, // Sanctum/Auth ishlatayotganingiz uchun bu true qolishi kerak
 ];
