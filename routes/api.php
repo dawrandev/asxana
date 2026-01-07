@@ -25,7 +25,7 @@ Route::prefix('v1')->middleware('set-api-locale')->group(function () {
         Route::delete('/{id}', [\App\Http\Controllers\ProductController::class, 'destroy']);
     });
 
-    Route::post('/auth/login', [\App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('/auth/register', [\App\Http\Controllers\AuthController::class, 'register']);
-    Route::post('/auth/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+    Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
+    Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 });

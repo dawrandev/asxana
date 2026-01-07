@@ -3,20 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Repositories\AuthRepository;
+use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * @OA\Tag(
+ *     name="Auth",
+ *     description="Authentication Endpoints"
+ * )
+ */
 class AuthController extends Controller
 {
     public function __construct(
         protected AuthService $authService,
-        protected AuthRepository $authRepository
     ) {
         // 
     }
+
+    /**
+     * @OA\Post(
+     * path="/api/v1/login",
+     * summary="Tizimga kirish va token olish",
+     * tags={"Auth"},
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * required={"login","password"},
+     * @OA\Property(property="login", type="string", example="admin123"),
+     * @OA\Property(property="password", type="string", format="password", example="admin123")
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Muvaffaqiyatli kirish",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="data", type="object",
+     * @OA\Property(property="token", type="string", example="2|Xyz...123")
+     * )
+     * )
+     * ),
+     * @OA\Response(response=401, description="Login yoki parol xato")
+     * )
+     */
     public function login(LoginRequest $request): JsonResponse
     {
         try {
@@ -45,5 +77,100 @@ class AuthController extends Controller
         }
     }
 
-    // public function 
+
+    /**
+     * @OA\Post(
+     * path="/api/v1/register",
+     * summary="Yangi foydalanuvchini ro'yxatdan o'tkazish",
+     * tags={"Auth"},
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(
+     * required={"login","password","password_confirmation","phone"},
+     * @OA\Property(property="login", type="string", example="dawrandev"),
+     * @OA\Property(property="password", type="string", format="password", example="dawrandev"),
+     * @OA\Property(property="password_confirmation", type="string", format="password", example="dawrandev"),
+     * @OA\Property(property="phone", type="string", example="+998901234567"),
+     * @OA\Property(property="role", type="string", enum={"admin", "client"}, default="admin")
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="Muvaffaqiyatli ro'yxatdan o'tildi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="User registered successfully"),
+     * @OA\Property(property="data", type="object",
+     * @OA\Property(property="user", type="object"),
+     * @OA\Property(property="token", type="string", example="1|Abc...xyz")
+     * )
+     * )
+     * ),
+     * @OA\Response(response=422, description="Validatsiya xatosi")
+     * )
+     */
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        try {
+            [$user, $token] = $this->authService->register($request->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User Registered Successfully',
+                'data' => [
+                    'user' => $user,
+                    'token' => $token,
+                ],
+                201
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server Error',
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     * path="/api/v1/logout",
+     * summary="Tizimdan chiqish (Tokenni bekor qilish)",
+     * tags={"Auth"},
+     * security={{"sanctum": {}}},
+     * @OA\Response(
+     * response=200,
+     * description="Token muvaffaqiyatli o'chirildi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=true),
+     * @OA\Property(property="message", type="string", example="Successfully logged out")
+     * )
+     * ),
+     * @OA\Response(response=401, description="Avtorizatsiyadan o'tilmagan")
+     * )
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        try {
+
+            $user = $request->user();
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated',
+                ], 401);
+            }
+            $this->authService->logout($request->user());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Logged out successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server Error',
+            ], 500);
+        }
+    }
 }

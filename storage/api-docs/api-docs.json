@@ -24,6 +24,199 @@
         }
     ],
     "paths": {
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Tizimga kirish va token olish",
+                "operationId": "da2ca4d7a5cdec77b8b45a20373535cb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "login",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "login": {
+                                        "type": "string",
+                                        "example": "admin123"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "admin123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Muvaffaqiyatli kirish",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "2|Xyz...123"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login yoki parol xato"
+                    }
+                }
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Yangi foydalanuvchini ro'yxatdan o'tkazish",
+                "operationId": "6796c44e1f6079c411abbfed066c5907",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "login",
+                                    "password",
+                                    "password_confirmation",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "login": {
+                                        "type": "string",
+                                        "example": "dawrandev"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "dawrandev"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "dawrandev"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+998901234567"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "default": "admin",
+                                        "enum": [
+                                            "admin",
+                                            "client"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Muvaffaqiyatli ro'yxatdan o'tildi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|Abc...xyz"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validatsiya xatosi"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Tizimdan chiqish (Tokenni bekor qilish)",
+                "operationId": "c4eddaf1a2e990cc90e4326c0d731d41",
+                "responses": {
+                    "200": {
+                        "description": "Token muvaffaqiyatli o'chirildi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Avtorizatsiyadan o'tilmagan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/categories": {
             "get": {
                 "tags": [
@@ -1350,6 +1543,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Auth",
+            "description": "Authentication Endpoints"
+        },
         {
             "name": "Categories",
             "description": "Kategoriyalarni boshqarish uchun API endpointlar"
