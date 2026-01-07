@@ -14,19 +14,11 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $names = [];
-
-        if ($this->relationLoaded('translations')) {
-            foreach ($this->translations as $translation) {
-                $names[$translation->lang_code] = $translation->name;
-            }
-        } else {
-            $names = $this->name;
-        }
-
         return [
             'id' => $this->id,
-            'name' => $names, // Natija: {"uz": "...", "ru": "...", "kk": "..."}
+            'name' => $this->relationLoaded('translations')
+                ? $this->translations->pluck('name', 'lang_code')
+                : $this->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

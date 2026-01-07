@@ -8,6 +8,11 @@ class CategoryRepository
 {
     public function getAllCategories()
     {
-        return Category::with('translations')->get();
+        return Category::all();
+    }
+
+    public function getCategoryByIdWithTranslations(int $id)
+    {
+        return Category::with('translations')->find($id);
     }
 }
