@@ -851,6 +851,134 @@
                 }
             }
         },
+        "/api/v1/clients": {
+            "get": {
+                "tags": [
+                    "Clients"
+                ],
+                "summary": "Mijozlar ro'yxatini olish",
+                "description": "Barcha mijozlarni sahifalangan (pagination) holda qaytaradi. Faqat avtorizatsiyadan o'tgan foydalanuvchilar uchun.",
+                "operationId": "b302d909c0e1166a2c033bfd17ed030f",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Sahifadagi elementlar soni (default: 15)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 15
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Sahifa raqami",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mijozlar ro'yxati muvaffaqiyatli qaytarildi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Clients retrieved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "clients": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "user_id": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "first_name": {
+                                                                "type": "string",
+                                                                "example": "John"
+                                                            },
+                                                            "last_name": {
+                                                                "type": "string",
+                                                                "example": "Doe"
+                                                            },
+                                                            "date": {
+                                                                "type": "string",
+                                                                "format": "date",
+                                                                "example": "1990-01-01"
+                                                            },
+                                                            "gender": {
+                                                                "type": "string",
+                                                                "example": "male"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "pagination": {
+                                                    "properties": {
+                                                        "total": {
+                                                            "type": "integer",
+                                                            "example": 100
+                                                        },
+                                                        "count": {
+                                                            "type": "integer",
+                                                            "example": 15
+                                                        },
+                                                        "per_page": {
+                                                            "type": "integer",
+                                                            "example": 15
+                                                        },
+                                                        "current_page": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "total_pages": {
+                                                            "type": "integer",
+                                                            "example": 7
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Avtorizatsiyadan o'tilmagan"
+                    },
+                    "500": {
+                        "description": "Server xatosi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/products": {
             "get": {
                 "tags": [
@@ -1568,6 +1696,10 @@
         {
             "name": "Categories",
             "description": "Kategoriyalarni boshqarish uchun API endpointlar"
+        },
+        {
+            "name": "Clients",
+            "description": "Klientlarni ko'rish uchun API endpointlar"
         },
         {
             "name": "Products",
