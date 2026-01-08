@@ -7,6 +7,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::post('/telegram/webhook', [\App\Http\Controllers\TelegramController::class, 'handle']);
+
 Route::prefix('v1')->middleware('set-api-locale')->group(function () {
 
     Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
