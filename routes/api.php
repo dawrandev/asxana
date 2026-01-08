@@ -9,6 +9,10 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->middleware('set-api-locale')->group(function () {
 
+    Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+    Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware('check.role');
+    Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
+
     Route::prefix('categories')->group(function () {
         Route::get('/', [\App\Http\Controllers\CategoryController::class, 'index']);
         Route::post('/', [\App\Http\Controllers\CategoryController::class, 'store']);
@@ -25,7 +29,11 @@ Route::prefix('v1')->middleware('set-api-locale')->group(function () {
         Route::delete('/{id}', [\App\Http\Controllers\ProductController::class, 'destroy']);
     });
 
-    Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware('check.role');
-    Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::prefix('clients')->middleware('auth:sanctum')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ClientController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\ClientController::class, 'store']);
+        Route::get('/{id}', [\App\Http\Controllers\ClientController::class, 'show']);
+        Route::put('/{id}', [\App\Http\Controllers\ClientController::class, 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\ClientController::class, 'destroy']);
+    });
 });
