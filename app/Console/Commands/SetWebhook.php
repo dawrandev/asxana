@@ -26,8 +26,14 @@ class SetWebhook extends Command
      */
     public function handle()
     {
-        $response = Telegram::setWebhook(['url' => env('APP_URL') . '/api/telegram/webhook']);
+        $baseUrl = rtrim(env('APP_URL'), '/');
+        $webhookUrl = $baseUrl . '/api/telegram/webhook';
 
-        $this->info('Webhook set successfully:' . json_encode($response));
+        try {
+            $response = Telegram::setWebhook(['url' => $webhookUrl]);
+            $this->info('Webhook set successfully: ' . json_encode($response));
+        } catch (\Exception $e) {
+            $this->error('Xatolik: ' . $e->getMessage());
+        }
     }
 }
