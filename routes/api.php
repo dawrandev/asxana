@@ -26,6 +26,6 @@ Route::prefix('v1')->middleware('set-api-locale')->group(function () {
     });
 
     Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
+    Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware('check.role');
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 });

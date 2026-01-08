@@ -25,7 +25,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'set-api-locale' => \App\Http\Middleware\SetApiLocale::class
+            'set-api-locale' => \App\Http\Middleware\SetApiLocale::class,
+            'check.role' => \App\Http\Middleware\CheckRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

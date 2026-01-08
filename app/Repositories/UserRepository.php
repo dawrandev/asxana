@@ -18,7 +18,7 @@ class UserRepository
             'login' => $data['login'],
             'password' => Hash::make($data['password']),
             'phone' => $data['phone'],
-            'role' => $data['role'],
+            'role' => 'admin',
         ]);
     }
 

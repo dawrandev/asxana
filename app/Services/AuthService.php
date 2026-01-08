@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -28,12 +29,9 @@ class AuthService
         return [$user, $token];
     }
 
-    public function register(array $data): array
+    public function register(array $data): User
     {
-        $user = $this->userRepository->create($data);
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return [$user, $token];
+        return $this->userRepository->create($data);
     }
 
     public function logout($user): bool

@@ -93,7 +93,8 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Yangi foydalanuvchini ro'yxatdan o'tkazish",
+                "summary": "Admin tomonidan yangi foydalanuvchi yaratish",
+                "description": "Ushbu metod faqat tizimga kirgan adminlar uchun ishlaydi va yangi foydalanuvchini avtomatik 'admin' roli bilan yaratadi.",
                 "operationId": "6796c44e1f6079c411abbfed066c5907",
                 "requestBody": {
                     "required": true,
@@ -109,29 +110,21 @@
                                 "properties": {
                                     "login": {
                                         "type": "string",
-                                        "example": "dawrandev"
+                                        "example": "yangi_admin"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "dawrandev"
+                                        "example": "parol123"
                                     },
                                     "password_confirmation": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "dawrandev"
+                                        "example": "parol123"
                                     },
                                     "phone": {
                                         "type": "string",
-                                        "example": "+998901234567"
-                                    },
-                                    "role": {
-                                        "type": "string",
-                                        "default": "admin",
-                                        "enum": [
-                                            "admin",
-                                            "client"
-                                        ]
+                                        "example": "+998901112233"
                                     }
                                 },
                                 "type": "object"
@@ -141,7 +134,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Muvaffaqiyatli ro'yxatdan o'tildi",
+                        "description": "Foydalanuvchi muvaffaqiyatli yaratildi",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -152,16 +145,30 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "User registered successfully"
+                                            "example": "User created successfully"
                                         },
                                         "data": {
                                             "properties": {
                                                 "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "login": {
+                                                            "type": "string",
+                                                            "example": "yangi_admin"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "+998901112233"
+                                                        },
+                                                        "role": {
+                                                            "type": "string",
+                                                            "example": "admin"
+                                                        }
+                                                    },
                                                     "type": "object"
-                                                },
-                                                "token": {
-                                                    "type": "string",
-                                                    "example": "1|Abc...xyz"
                                                 }
                                             },
                                             "type": "object"
@@ -172,10 +179,21 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Avtorizatsiya xatosi (Token yo'q)"
+                    },
+                    "403": {
+                        "description": "Ruxsat yo'q (Faqat adminlar uchun)"
+                    },
                     "422": {
                         "description": "Validatsiya xatosi"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/v1/logout": {
