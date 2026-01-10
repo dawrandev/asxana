@@ -12,7 +12,7 @@ Route::post('/telegram/webhook', [\App\Http\Controllers\TelegramController::clas
 Route::prefix('v1')->middleware('set-api-locale')->group(function () {
 
     Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware('check.role');
+    Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware('check.role', 'auth:sanctum');
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 
     Route::prefix('categories')->group(function () {

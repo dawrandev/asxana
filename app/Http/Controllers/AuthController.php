@@ -61,14 +61,12 @@ class AuthController extends Controller
                     'user' => $user,
                     'token' => $token,
                 ],
-                200
-            ]);
+            ], 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'errors' => $e->errors(),
-                422
-            ]);
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
