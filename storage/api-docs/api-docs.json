@@ -15,7 +15,7 @@
     },
     "servers": [
         {
-            "url": "",
+            "url": "https://dawran.dbc-server.uz/",
             "description": "API Server"
         },
         {
@@ -1125,7 +1125,9 @@
                                     "category_id",
                                     "price",
                                     "image",
-                                    "name"
+                                    "name[kk]",
+                                    "name[uz]",
+                                    "name[ru]"
                                 ],
                                 "properties": {
                                     "category_id": {
@@ -1148,47 +1150,35 @@
                                         "type": "string",
                                         "format": "binary"
                                     },
-                                    "name": {
-                                        "description": "Mahsulot nomlari (til bo‘yicha)",
-                                        "properties": {
-                                            "kk": {
-                                                "description": "Mahsulot nomi (kk)",
-                                                "type": "string",
-                                                "example": "Sezar salat"
-                                            },
-                                            "uz": {
-                                                "description": "Mahsulot nomi (uz)",
-                                                "type": "string",
-                                                "example": "Sezar salat"
-                                            },
-                                            "ru": {
-                                                "description": "Mahsulot nomi (ru)",
-                                                "type": "string",
-                                                "example": "Сезар салат"
-                                            }
-                                        },
-                                        "type": "object"
+                                    "name[kk]": {
+                                        "description": "Mahsulot nomi (kk)",
+                                        "type": "string",
+                                        "example": "Sezar salat"
                                     },
-                                    "description": {
-                                        "description": "Mahsulot tavsiflari (til bo‘yicha)",
-                                        "properties": {
-                                            "kk": {
-                                                "description": "Mahsulot tavsifi (kk)",
-                                                "type": "string",
-                                                "example": "Tovuq go'shti va parmezan bilan"
-                                            },
-                                            "uz": {
-                                                "description": "Mahsulot tavsifi (uz)",
-                                                "type": "string",
-                                                "example": "Tovuq go'shti va parmezan bilan"
-                                            },
-                                            "ru": {
-                                                "description": "Mahsulot tavsifi (ru)",
-                                                "type": "string",
-                                                "example": "Классический с курицей и пармезаном"
-                                            }
-                                        },
-                                        "type": "object"
+                                    "name[uz]": {
+                                        "description": "Mahsulot nomi (uz)",
+                                        "type": "string",
+                                        "example": "Sezar salat"
+                                    },
+                                    "name[ru]": {
+                                        "description": "Mahsulot nomi (ru)",
+                                        "type": "string",
+                                        "example": "Сезар салат"
+                                    },
+                                    "description[kk]": {
+                                        "description": "Mahsulot tavsifi (kk)",
+                                        "type": "string",
+                                        "example": "Tovuq go'shti bilan"
+                                    },
+                                    "description[uz]": {
+                                        "description": "Mahsulot tavsifi (uz)",
+                                        "type": "string",
+                                        "example": "Tovuq go'shti bilan"
+                                    },
+                                    "description[ru]": {
+                                        "description": "Mahsulot tavsifi (ru)",
+                                        "type": "string",
+                                        "example": "С курицей"
                                     }
                                 },
                                 "type": "object"
@@ -1225,7 +1215,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validatsiya xatosi (masalan: rasm formati noto'g'ri yoki nom band)",
+                        "description": "Validatsiya xatosi",
                         "content": {
                             "application/json": {
                                 "schema": {
