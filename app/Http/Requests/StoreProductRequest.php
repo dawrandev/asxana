@@ -26,7 +26,7 @@ class StoreProductRequest extends FormRequest
     {
         $rules = [
             'category_id' => 'required|integer|exists:categories,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
             'price' => 'required|integer|min:0',
             'is_available' => 'sometimes|boolean',
 
