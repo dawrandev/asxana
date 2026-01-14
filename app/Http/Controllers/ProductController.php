@@ -23,11 +23,11 @@ class ProductController extends Controller
         protected ProductService $productService,
         protected ProductRepository $productRepository
     ) {}
-
     /**
      * @OA\Get(
      * path="/api/v1/products",
      * summary="Mahsulotlar ro'yxatini olish",
+     * description="Paginatsiya va filtrlar bilan mahsulotlar ro'yxatini qaytaradi",
      * tags={"Products"},
      * @OA\Parameter(
      * name="search",
@@ -63,16 +63,36 @@ class ProductController extends Controller
      * @OA\JsonContent(
      * @OA\Property(property="success", type="boolean", example=true),
      * @OA\Property(property="message", type="string", example="Products retrieved successfully"),
-     * @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/ProductResource")),
      * @OA\Property(
-     * property="meta",
+     * property="data",
      * type="object",
+     * @OA\Property(
+     * property="items",
+     * type="array",
+     * description="Mahsulotlar ro'yxati",
+     * @OA\Items(ref="#/components/schemas/ProductResource")
+     * ),
+     * @OA\Property(
+     * property="pagination",
+     * type="object",
+     * description="Paginatsiya ma'lumotlari",
      * @OA\Property(property="current_page", type="integer", example=1),
      * @OA\Property(property="last_page", type="integer", example=10),
      * @OA\Property(property="per_page", type="integer", example=15),
      * @OA\Property(property="total", type="integer", example=150)
+     * )
      * ),
      * @OA\Property(property="code", type="integer", example=200)
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Server xatosi",
+     * @OA\JsonContent(
+     * @OA\Property(property="success", type="boolean", example=false),
+     * @OA\Property(property="message", type="string", example="Failed to retrieve products"),
+     * @OA\Property(property="data", type="null"),
+     * @OA\Property(property="code", type="integer", example=500)
      * )
      * )
      * )
