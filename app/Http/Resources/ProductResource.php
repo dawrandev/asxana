@@ -33,7 +33,7 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'category_name' => $this->category->name,
-            'image' => $this->image ? asset('storage/products/' . $this->image) : null,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
             'price' => $this->price,
             'name' => $this->name,
             'description' => $this->description,
