@@ -28,19 +28,32 @@ class ProductController extends Controller
      * @OA\Get(
      * path="/api/v1/products",
      * summary="Mahsulotlar ro'yxatini olish",
-     * description="Filtrlar yordamida mahsulotlarni saralab olish va tillar bo'yicha ma'lumotlarni ko'rish",
      * tags={"Products"},
      * @OA\Parameter(
-     * name="Accept-Language",
-     * in="header",
-     * description="Tilni tanlash (uz, ru, kk)",
+     * name="search",
+     * in="query",
+     * description="Nomi yoki tavsifi bo'yicha qidiruv",
      * required=false,
-     * @OA\Schema(type="string", default="uz")
+     * @OA\Schema(type="string")
+     * ),
+     * @OA\Parameter(
+     * name="per_page",
+     * in="query",
+     * description="Har bir sahifadagi mahsulotlar soni",
+     * required=false,
+     * @OA\Schema(type="integer", default=15)
+     * ),
+     * @OA\Parameter(
+     * name="page",
+     * in="query",
+     * description="Sahifa raqami",
+     * required=false,
+     * @OA\Schema(type="integer", default=1)
      * ),
      * @OA\Parameter(
      * name="category_id",
      * in="query",
-     * description="Kategoriya bo'yicha filtralsh",
+     * description="Kategoriya bo'yicha filtralash",
      * required=false,
      * @OA\Schema(type="integer")
      * ),
@@ -50,32 +63,16 @@ class ProductController extends Controller
      * @OA\JsonContent(
      * @OA\Property(property="success", type="boolean", example=true),
      * @OA\Property(property="message", type="string", example="Products retrieved successfully"),
+     * @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/ProductResource")),
      * @OA\Property(
-     * property="data",
-     * type="array",
-     * @OA\Items(
-     * @OA\Property(property="id", type="integer", example=1),
-     * @OA\Property(property="category_name", type="string", example="Salat"),
-     * @OA\Property(property="image", type="string", example="sezar-salat.jpg"),
-     * @OA\Property(property="price", type="integer", example=25000),
-     * @OA\Property(property="name", type="string", example="Sezar salat"),
-     * @OA\Property(property="description", type="string", example="Tovuq go'shti, parmezan bilan klassik Sezar salat"),
-     * @OA\Property(property="is_available", type="boolean", example=true, nullable=true),
-     * @OA\Property(property="created_at", type="string", format="date-time", example="2025-12-22T04:52:34.000000Z"),
-     * @OA\Property(property="updated_at", type="string", format="date-time", example="2025-12-22T04:52:34.000000Z")
-     * )
+     * property="meta",
+     * type="object",
+     * @OA\Property(property="current_page", type="integer", example=1),
+     * @OA\Property(property="last_page", type="integer", example=10),
+     * @OA\Property(property="per_page", type="integer", example=15),
+     * @OA\Property(property="total", type="integer", example=150)
      * ),
      * @OA\Property(property="code", type="integer", example=200)
-     * )
-     * ),
-     * @OA\Response(
-     * response=500,
-     * description="Server xatosi",
-     * @OA\JsonContent(
-     * @OA\Property(property="success", type="boolean", example=false),
-     * @OA\Property(property="message", type="string", example="Failed to retrieve products"),
-     * @OA\Property(property="data", type="null"),
-     * @OA\Property(property="code", type="integer", example=500)
      * )
      * )
      * )
@@ -85,9 +82,20 @@ class ProductController extends Controller
         try {
             $products = $this->productService->getProducts($request->validated());
 
-            $data = ProductResource::collection($products);
+            $resourceCollection = ProductResource::collection($products);
 
-            return $this->jsonResponse(true, 'Products retrieved successfully', $data, 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Products retrieved successfully',
+                'data' => $resourceCollection->response()->getData()->data,
+                'meta' => [
+                    'current_page' => $products->currentPage(),
+                    'last_page' => $products->lastPage(),
+                    'per_page' => $products->perPage(),
+                    'total' => $products->total(),
+                ],
+                'code' => 200
+            ], 200);
         } catch (\Exception $e) {
             return $this->jsonResponse(false, 'Failed to retrieve products', null, 500);
         }

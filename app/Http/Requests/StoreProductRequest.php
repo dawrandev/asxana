@@ -65,17 +65,6 @@ class StoreProductRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
-    {
-        abort(response()->json([
-            'has_image' => $this->hasFile('image'),
-            'image_is_valid' => $this->file('image')?->isValid(),
-            'mime_type' => $this->file('image')?->getMimeType(),
-            'all_keys' => array_keys($this->all()),
-            'is_available_value' => $this->is_available
-        ], 200));
-    }
-
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(

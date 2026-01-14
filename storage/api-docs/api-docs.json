@@ -15,7 +15,7 @@
     },
     "servers": [
         {
-            "url": "https://dawran.dbc-server.uz/",
+            "url": "https://dawran.dbc-server.uz",
             "description": "API Server"
         },
         {
@@ -985,23 +985,41 @@
                     "Products"
                 ],
                 "summary": "Mahsulotlar ro'yxatini olish",
-                "description": "Filtrlar yordamida mahsulotlarni saralab olish va tillar bo'yicha ma'lumotlarni ko'rish",
                 "operationId": "7ca3593d05653d957ae7be1ac648ca44",
                 "parameters": [
                     {
-                        "name": "Accept-Language",
-                        "in": "header",
-                        "description": "Tilni tanlash (uz, ru, kk)",
+                        "name": "search",
+                        "in": "query",
+                        "description": "Nomi yoki tavsifi bo'yicha qidiruv",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "default": "uz"
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Har bir sahifadagi mahsulotlar soni",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Sahifa raqami",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
                         }
                     },
                     {
                         "name": "category_id",
                         "in": "query",
-                        "description": "Kategoriya bo'yicha filtralsh",
+                        "description": "Kategoriya bo'yicha filtralash",
                         "required": false,
                         "schema": {
                             "type": "integer"
@@ -1026,80 +1044,33 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "category_name": {
-                                                        "type": "string",
-                                                        "example": "Salat"
-                                                    },
-                                                    "image": {
-                                                        "type": "string",
-                                                        "example": "sezar-salat.jpg"
-                                                    },
-                                                    "price": {
-                                                        "type": "integer",
-                                                        "example": 25000
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Sezar salat"
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": "Tovuq go'shti, parmezan bilan klassik Sezar salat"
-                                                    },
-                                                    "is_available": {
-                                                        "type": "boolean",
-                                                        "example": true,
-                                                        "nullable": true
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2025-12-22T04:52:34.000000Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2025-12-22T04:52:34.000000Z"
-                                                    }
-                                                },
-                                                "type": "object"
+                                                "$ref": "#/components/schemas/ProductResource"
                                             }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 15
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 150
+                                                }
+                                            },
+                                            "type": "object"
                                         },
                                         "code": {
                                             "type": "integer",
                                             "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server xatosi",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Failed to retrieve products"
-                                        },
-                                        "data": {
-                                            "type": "null"
-                                        },
-                                        "code": {
-                                            "type": "integer",
-                                            "example": 500
                                         }
                                     },
                                     "type": "object"
