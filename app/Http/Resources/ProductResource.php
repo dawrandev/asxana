@@ -33,13 +33,13 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'category_name' => $this->category->name,
-            'image' => $this->image,
+            'image' => $this->image ? asset('storage/products/' . $this->image) : null,
             'price' => $this->price,
             'name' => $this->name,
             'description' => $this->description,
-            'is_available' => $this->is_available,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'is_available' => (bool)$this->is_available, // Frontendga boolean tipida borishi uchun
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s')
         ];
     }
 }

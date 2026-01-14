@@ -6,6 +6,7 @@ use App\Rules\UniqueProductTranslation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Log;
 
 class StoreProductRequest extends FormRequest
 {
@@ -62,6 +63,17 @@ class StoreProductRequest extends FormRequest
             'name.*.max' => 'Mahsulot nomi 255 belgidan ko‘p bo‘lishi mumkin emas',
             'description.*.string' => 'Tavsif matn formatida bo‘lishi kerak',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        abort(response()->json([
+            'has_image' => $this->hasFile('image'),
+            'image_is_valid' => $this->file('image')?->isValid(),
+            'mime_type' => $this->file('image')?->getMimeType(),
+            'all_keys' => array_keys($this->all()),
+            'is_available_value' => $this->is_available
+        ], 200));
     }
 
     protected function failedValidation(Validator $validator)
